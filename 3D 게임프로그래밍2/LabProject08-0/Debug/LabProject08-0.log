@@ -1,13 +1,1 @@
-﻿  stdafx.cpp
-  Camera.cpp
-  DDSTextureLoader12.cpp
-  GameFramework.cpp
-  LabProject08-0.cpp
-  Mesh.cpp
-  Object.cpp
-  Player.cpp
-  Scene.cpp
-  Shader.cpp
-  Timer.cpp
-  코드를 생성하고 있습니다...
-  LabProject08-0.vcxproj -> C:\Users\ysj\Desktop\2021-2\3D 게임프로그래밍2\Debug\LabProject08-0(DDS Texture).exe
+﻿  LabProject08-0.vcxproj -> C:\Users\윤성주\Desktop\2021-2\3D 게임프로그래밍2\Debug\LabProject08-0(DDS Texture).exe
