@@ -57,6 +57,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[2];
 
+	// 샘플러를 set하기 위한 range
 	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	pd3dDescriptorRanges[0].NumDescriptors = 1;
 	pd3dDescriptorRanges[0].BaseShaderRegister = 2; //GameObject
@@ -85,24 +86,25 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[2].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //GameObject
 	pd3dRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-
+	
+	// 텍스터를 만드는 파라미터
 	pd3dRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pd3dRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[3].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1];
 	pd3dRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	D3D12_STATIC_SAMPLER_DESC d3dSamplerDesc;
-	::ZeroMemory(&d3dSamplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
+	::ZeroMemory(&d3dSamplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC)); // 스태택 샘플러로 만듬
 	d3dSamplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	d3dSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	d3dSamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	d3dSamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	d3dSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 반복 타일링
+	d3dSamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 반복 타일링
+	d3dSamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 반복 타일링
 	d3dSamplerDesc.MipLODBias = 0;
 	d3dSamplerDesc.MaxAnisotropy = 1;
 	d3dSamplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 	d3dSamplerDesc.MinLOD = 0;
 	d3dSamplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	d3dSamplerDesc.ShaderRegister = 0;
+	d3dSamplerDesc.ShaderRegister = 0; // 0번 레지스터에 연결
 	d3dSamplerDesc.RegisterSpace = 0;
 	d3dSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 

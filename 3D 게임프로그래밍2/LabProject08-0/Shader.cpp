@@ -359,6 +359,7 @@ void CObjectsShader::ReleaseShaderVariables()
 
 void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext)
 {
+	// 텍스처로드
 	CTexture *ppTextures[TEXTURES];
 	ppTextures[0] = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
 	ppTextures[0]->LoadTextureFromDDSFile(pd3dDevice, pd3dCommandList, L"Lava(Diffuse).dds", RESOURCE_TEXTURE2D, 0);
@@ -376,8 +377,10 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 	int xObjects = 8, yObjects = 8, zObjects = 8;
 	m_nObjects = (2 * xObjects + 1) * (2 * yObjects + 1) * (2 * zObjects + 1);
 
+	// 텍스처를 위한 디스크립터 힙
 	CreateCbvSrvDescriptorHeaps(pd3dDevice, m_nObjects, TEXTURES);
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	// 쉐이더 리소스 뷰 생성
 	CreateConstantBufferViews(pd3dDevice, m_nObjects, m_pd3dcbGameObjects, ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255));
 	for (int i = 0; i < TEXTURES; i++) CreateShaderResourceViews(pd3dDevice, ppTextures[i], 0, 3);
 
