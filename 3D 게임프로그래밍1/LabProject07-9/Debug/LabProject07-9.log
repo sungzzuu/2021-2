@@ -1,0 +1,14 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\Microsoft.Common.CurrentVersion.targets(5466,5): warning MSB3061: "C:\Users\윤성주\Desktop\LabProject07-9\Debug\LabProject07-9.exe" 파일을 삭제할 수 없습니다. 'C:\Users\윤성주\Desktop\LabProject07-9\Debug\LabProject07-9.exe' 경로에 대한 액세스가 거부되었습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(77,5): warning : 'c:\users\윤성주\desktop\labproject07-9\debug\labproject07-9.exe' 경로에 대한 액세스가 거부되었습니다.
+  stdafx.cpp
+  Camera.cpp
+  GameFramework.cpp
+  LabProject07-9.cpp
+  Mesh.cpp
+  Object.cpp
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+  Timer.cpp
+  코드를 생성하고 있습니다...
+LINK : fatal error LNK1104: 'C:\Users\윤성주\Desktop\LabProject07-9\Debug\LabProject07-9.exe' 파일을 열 수 없습니다.
