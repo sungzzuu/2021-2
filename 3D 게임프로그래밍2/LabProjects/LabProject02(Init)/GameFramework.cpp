@@ -141,12 +141,30 @@ void CGameFramework::CreateSwapChain()
 
 void CGameFramework::CreateRtvAndDsvDescriptorHeaps()
 {
-	// 서술자 크기 얻기
-	m_nRtvDescriptorIncrementSize = m_pd3dDevice->
-		GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	m_nDsvDescriptorIncrementSize = m_pd3dDevice->
-		GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 
+	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
+	::ZeroMemory(&d3dDescriptorHeapDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
+	d3dDescriptorHeapDesc.NumDescriptors = m_nSwapChainBuffers;
+	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; 
+	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	d3dDescriptorHeapDesc.NodeMask = 0;
+	HRESULT hResult = m_pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc,
+		__uuidof(ID3D12DescriptorHeap), (void**)&m_pd3dRtvDescriptorHeap);
+	//렌더 타겟 서술자 힙(서술자의 개수는 스왑체인 버퍼의 개수)을 생성한다. 
+
+	m_nRtvDescriptorIncrementSize = 
+		m_pd3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//렌더 타겟 서술자 힙의 원소의 크기를 저장한다. 
+
+	d3dDescriptorHeapDesc.NumDescriptors = 1;
+	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	hResult = m_pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc,
+		__uuidof(ID3D12DescriptorHeap), (void**)&m_pd3dDsvDescriptorHeap);
+	//깊이-스텐실 서술자 힙(서술자의 개수는 1)을 생성한다. 
+
+	m_nDsvDescriptorIncrementSize = 
+	m_pd3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+	//깊이-스텐실 서술자 힙의 원소의 크기를 저장한다.
 }
 
 void CGameFramework::CreateDirect3DDevice()
@@ -235,6 +253,7 @@ void CGameFramework::CreateDirect3DDevice()
 		pd3dAdapter->Release();
 }
 
+// 여기서부터
 void CGameFramework::CreateCommandQueueAndList()
 {
 	D3D12_COMMAND_QUEUE_DESC d3dCommandQueueDesc;
@@ -261,6 +280,17 @@ void CGameFramework::CreateCommandQueueAndList()
 
 void CGameFramework::CreateRenderTargetViews()
 {
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle =
+		m_pd3dRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+
+	for (UINT i = 0; i < m_nSwapChainBuffers; i++)
+	{
+		m_pdxgiSwapChain->GetBuffer(i, __uuidof(ID3D12Resource), 
+			(void**)&m_ppd3dRenderTargetBuffers[i]);
+		m_pd3dDevice->CreateRenderTargetView(m_ppd3dRenderTargetBuffers[i], 
+			NULL, d3dRtvCPUDescriptorHandle);
+		d3dRtvCPUDescriptorHandle.ptr += m_nRtvDescriptorIncrementSize;
+	}
 }
 
 void CGameFramework::CreateDepthStencilView()

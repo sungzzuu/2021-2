@@ -1,1 +1,2 @@
 C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\Source\Source(신버전;VC2015~)\Chapter02\InitWinsock\Debug\InitWinsock.exe
+D:\2021-2\네트워크 게임 프로그래밍\Source\Source(신버전;VC2015~)\Chapter02\InitWinsock\Debug\InitWinsock.exe
