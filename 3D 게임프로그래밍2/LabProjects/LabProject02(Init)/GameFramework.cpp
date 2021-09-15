@@ -317,6 +317,7 @@ void CGameFramework::CreateRenderTargetViews()
 
 void CGameFramework::CreateDepthStencilView()
 {
+	// 스텐실 버퍼는 렌더링시에 특수한 효과를 주기위해. used to mask pixels in an image
 	// CreateRtvAndDsvDescriptorHeaps()에서 먼저 서술자힙을 생성해야함
 
 	D3D12_RESOURCE_DESC d3dResourceDesc;
@@ -328,10 +329,10 @@ void CGameFramework::CreateDepthStencilView()
 	d3dResourceDesc.MipLevels = 1;
 	d3dResourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	d3dResourceDesc.SampleDesc.Count = (m_bMsaa4xEnable) ? 4 : 1;
-	d3dResourceDesc.SampleDesc.Quality = (m_bMsaa4xEnable) ? (m_nMsaa4xQualityLevels - 1)
-		: 0;
+	d3dResourceDesc.SampleDesc.Quality = (m_bMsaa4xEnable) ? (m_nMsaa4xQualityLevels - 1) : 0;
 	d3dResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	d3dResourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
 	D3D12_HEAP_PROPERTIES d3dHeapProperties;
 	::ZeroMemory(&d3dHeapProperties, sizeof(D3D12_HEAP_PROPERTIES)); d3dHeapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
 	d3dHeapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
@@ -419,13 +420,6 @@ void CGameFramework::FrameAdvance()
 	//렌더 타겟 뷰(서술자)와 깊이-스텐실 뷰(서술자)를 출력-병합 단계(OM)에 연결한다. 
 	
 	//렌더링 코드는 여기에 추가될 것이다. 
-
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	m_pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
-	/*현재 렌더 타겟에 대한 렌더링이 끝나기를 기다린다. GPU가 렌더 타겟(버퍼)을 더 이상 사용하지 않으면 렌더 타겟
-	의 상태는 프리젠트 상태(D3D12_RESOURCE_STATE_PRESENT)로 바뀔 것이다.*/
 
 	hResult = m_pd3dCommandList->Close();
 	//명령 리스트를 닫힌 상태로 만든다. 
