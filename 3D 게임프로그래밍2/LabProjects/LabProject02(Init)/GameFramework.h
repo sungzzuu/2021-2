@@ -1,4 +1,5 @@
 #pragma once
+#include "Timer.h"
 
 // Direct3D 叼官捞胶 积己包府, 按眉 积己苞 包府, 涝仿, 局聪皋捞记
 class CGameFramework
@@ -47,6 +48,9 @@ private:
 	D3D12_VIEWPORT				m_d3dViewport;
 	D3D12_RECT					m_d3dScissorRect;
 
+private:
+	CGameTimer	m_GameTimer;
+	_TCHAR		m_pszFrameRate[50];
 
 
 public:

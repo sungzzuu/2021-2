@@ -29,6 +29,8 @@ CGameFramework::CGameFramework()
 
 	m_nWndClientWidth = FRAME_BUFFER_WIDTH;
 	m_nWndClientHeight = FRAME_BUFFER_HEIGHT;
+
+	_tcscpy_s(m_pszFrameRate, _T("LapProject ("));
 }
 
 CGameFramework::~CGameFramework()
@@ -373,6 +375,9 @@ void CGameFramework::AnimateObjects()
 
 void CGameFramework::FrameAdvance()
 {
+	//타이머의 시간이 갱신되도록 하고 프레임 레이트를 계산한다.
+	m_GameTimer.Tick(0.0f);
+
 	ProcessInput();
 	AnimateObjects();
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
@@ -421,6 +426,13 @@ void CGameFramework::FrameAdvance()
 	
 	//렌더링 코드는 여기에 추가될 것이다. 
 
+	//d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	//m_pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
+	///*현재 렌더 타겟에 대한 렌더링이 끝나기를 기다린다. GPU가 렌더 타겟(버퍼)을 더 이상 사용하지 않으면 렌더 타겟
+	//의 상태는 프리젠트 상태(D3D12_RESOURCE_STATE_PRESENT)로 바뀔 것이다.*/
+
 	hResult = m_pd3dCommandList->Close();
 	//명령 리스트를 닫힌 상태로 만든다. 
 
@@ -442,6 +454,8 @@ void CGameFramework::FrameAdvance()
 
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 
+	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
+	::SetWindowText(m_hWnd, m_pszFrameRate);
 }
 
 // ***
