@@ -13,7 +13,7 @@ CGameFramework::CGameFramework()
 	m_pd3dCommandList = NULL;
 
 	for (int i = 0; i < m_nSwapChainBuffers; i++) 
-		m_ppd3dRenderTargetBuffers[i] = NULL;
+		m_ppd3dSwapChainBackBuffers[i] = NULL;
 	m_pd3dRtvDescriptorHeap = NULL;
 	m_nRtvDescriptorIncrementSize = 0;
 
@@ -44,9 +44,11 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 
 	CreateDirect3DDevice();
 	CreateCommandQueueAndList();
-	CreateSwapChain();
+	//CreateSwapChain();
+	//CreateRtvAndDsvDescriptorHeaps();
+	//CreateRenderTargetViews();
 	CreateRtvAndDsvDescriptorHeaps();
-	CreateRenderTargetViews();
+	CreateSwapChain();
 	CreateDepthStencilView();
 
 	BuildObjects();
@@ -63,8 +65,8 @@ void CGameFramework::OnDestroy()
 	::CloseHandle(m_hFenceEvent);
 
 	for (int i = 0; i < m_nSwapChainBuffers; ++i)
-		if (m_ppd3dRenderTargetBuffers[i])
-			m_ppd3dRenderTargetBuffers[i]->Release();
+		if (m_ppd3dSwapChainBackBuffers[i])
+			m_ppd3dSwapChainBackBuffers[i]->Release();
 	if (m_pd3dRtvDescriptorHeap)
 		m_pd3dRtvDescriptorHeap->Release();
 
@@ -105,11 +107,7 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::CreateSwapChain()
 {
-	RECT rcClient;
-	::GetClientRect(m_hWnd, &rcClient);
-	m_nWndClientWidth = rcClient.right - rcClient.left;
-	m_nWndClientHeight = rcClient.bottom - rcClient.top;
-
+#ifdef _WITH_CREATE_SWAPCHAIN_FOR_HWND
 	DXGI_SWAP_CHAIN_DESC1 dxgiSwapChainDesc;
 	::ZeroMemory(&dxgiSwapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC1));
 	dxgiSwapChainDesc.Width = m_nWndClientWidth; // 너비
@@ -122,8 +120,8 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainDesc.Scaling = DXGI_SCALING_NONE; // 이미지를 모니터에 맞게 확대 축소하는 방식
 	dxgiSwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	dxgiSwapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-	dxgiSwapChainDesc.Flags = 0; // 전체화면 모드 사용시 사용하는 변수
-	
+	dxgiSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // 전체화면 모드 사용시 사용하는 변수
+
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC dxgiSwapChainFullScreenDesc;
 	::ZeroMemory(&dxgiSwapChainFullScreenDesc, sizeof(DXGI_SWAP_CHAIN_FULLSCREEN_DESC));
 	dxgiSwapChainFullScreenDesc.RefreshRate.Numerator = 60;
@@ -132,19 +130,41 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	dxgiSwapChainFullScreenDesc.Windowed = TRUE;
 
-	// 전체화면 설정을 고려한 스왑체인 생성 함수 
-	// 이 함수는 기존 교환 사슬을 해제한 후 교환 사슬 생성. -> 이전과 다른 설정으로 교환 사슬 생성 가능. 다중표본화도 재설정 가능
-	
 	m_pdxgiFactory->CreateSwapChainForHwnd(m_pd3dCommandQueue, m_hWnd,
 		&dxgiSwapChainDesc, &dxgiSwapChainFullScreenDesc, NULL, (IDXGISwapChain1
 			**)&m_pdxgiSwapChain);
 	//스왑체인을 생성한다. 
+#else
+	// 전체화면 설정을 고려한 스왑체인 생성 함수 
+	// 이 함수는 기존 교환 사슬을 해제한 후 교환 사슬 생성. -> 이전과 다른 설정으로 교환 사슬 생성 가능. 다중표본화도 재설정 가능
+	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
+	::ZeroMemory(&dxgiSwapChainDesc, sizeof(dxgiSwapChainDesc));
+	dxgiSwapChainDesc.BufferCount = m_nSwapChainBuffers;
+	dxgiSwapChainDesc.BufferDesc.Width = m_nWndClientWidth;
+	dxgiSwapChainDesc.BufferDesc.Height = m_nWndClientHeight;
+	dxgiSwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	dxgiSwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	dxgiSwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	dxgiSwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	dxgiSwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	dxgiSwapChainDesc.OutputWindow = m_hWnd;
+	dxgiSwapChainDesc.SampleDesc.Count = (m_bMsaa4xEnable) ? 4 : 1;
+	dxgiSwapChainDesc.SampleDesc.Quality = (m_bMsaa4xEnable) ? (m_nMsaa4xQualityLevels - 1) : 0;
+	dxgiSwapChainDesc.Windowed = TRUE;
+	dxgiSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+	HRESULT hResult = m_pdxgiFactory->CreateSwapChain(m_pd3dCommandQueue, &dxgiSwapChainDesc, (IDXGISwapChain**)&m_pdxgiSwapChain);
+#endif
 
 	m_pdxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
 	//“Alt+Enter” 키의 동작을 비활성화한다. 
 
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다. 
+
+#ifndef _WITH_SWAPCHAIN_FULLSCREEN_STATE
+	CreateRenderTargetViews();
+#endif
 }
 
 // 4.3.6 서술자 힙 생성
@@ -306,10 +326,10 @@ void CGameFramework::CreateRenderTargetViews()
 	{
 		// 교환사슬의 i번째 버퍼를 얻음
 		m_pdxgiSwapChain->GetBuffer(i, __uuidof(ID3D12Resource), 
-			(void**)&m_ppd3dRenderTargetBuffers[i]);
+			(void**)&m_ppd3dSwapChainBackBuffers[i]);
 
 		// 그 버퍼에 대한 RTV를 생성
-		m_pd3dDevice->CreateRenderTargetView(m_ppd3dRenderTargetBuffers[i], 
+		m_pd3dDevice->CreateRenderTargetView(m_ppd3dSwapChainBackBuffers [i], 
 			NULL, d3dRtvCPUDescriptorHandle);
 
 		// 힙의 다음 항목으로 넘어간다.
@@ -389,7 +409,7 @@ void CGameFramework::FrameAdvance()
 	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	d3dResourceBarrier.Transition.pResource =
-		m_ppd3dRenderTargetBuffers[m_nSwapChainBufferIndex];
+		m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex];
 	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
@@ -508,6 +528,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		case VK_F8:
 			break;
 		case VK_F9:
+			ChangeSwapChainState();
 			break;
 		default:
 			break;
@@ -541,4 +562,37 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 		break;
 	}
 	return(0);
+}
+
+void CGameFramework::ChangeSwapChainState()
+{
+	WaitForGpuComplete();
+
+	BOOL bFullScreenState = FALSE;
+	m_pdxgiSwapChain->GetFullscreenState(&bFullScreenState, NULL);
+	m_pdxgiSwapChain->SetFullscreenState(!bFullScreenState, NULL);
+
+	DXGI_MODE_DESC dxgiTargetParameters;
+	dxgiTargetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	dxgiTargetParameters.Width = m_nWndClientWidth;
+	dxgiTargetParameters.Height = m_nWndClientHeight;
+	dxgiTargetParameters.RefreshRate.Numerator = 60;
+	dxgiTargetParameters.RefreshRate.Denominator = 1;
+	dxgiTargetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	dxgiTargetParameters.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	m_pdxgiSwapChain->ResizeTarget(&dxgiTargetParameters);
+
+	for (int i = 0; i < m_nSwapChainBuffers; i++) 
+		if (m_ppd3dSwapChainBackBuffers[i])
+			m_ppd3dSwapChainBackBuffers[i]->Release();
+
+	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
+	m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth,
+		m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+	
+	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
+
+	CreateRenderTargetViews();
+
 }

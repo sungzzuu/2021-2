@@ -22,7 +22,7 @@ private:
 	UINT						m_nSwapChainBufferIndex;	// 현재 후면 버퍼 인덱스
 
 	// 렌더 타겟
-	ID3D12Resource*				m_ppd3dRenderTargetBuffers[m_nSwapChainBuffers]; // 버퍼
+	ID3D12Resource*				m_ppd3dSwapChainBackBuffers[m_nSwapChainBuffers]; // 버퍼
 	ID3D12DescriptorHeap*		m_pd3dRtvDescriptorHeap;						// 포인터
 	UINT						m_nRtvDescriptorIncrementSize;					// 크기
 
@@ -82,6 +82,8 @@ public:
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
+	// 전체화면 만드는 함수
+	void ChangeSwapChainState();
 
 
 };
