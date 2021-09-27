@@ -7,6 +7,9 @@
     <Filter Include="3장">
       <UniqueIdentifier>{ac109f2b-7dd9-4193-84c3-4669afa144d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4장">
+      <UniqueIdentifier>{8b84620c-e634-41ec-8e34-53324c240653}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HW_2-1.cpp">
@@ -20,6 +23,12 @@
     </ClCompile>
     <ClCompile Include="HW_3-1.cpp">
       <Filter>3장</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer.cpp">
+      <Filter>4장</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient.cpp">
+      <Filter>4장</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
