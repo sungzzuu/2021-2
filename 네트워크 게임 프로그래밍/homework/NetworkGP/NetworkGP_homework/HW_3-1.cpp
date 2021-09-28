@@ -16,12 +16,19 @@ int main()
 BOOL IsLittleEndian()
 {
 	u_short d = 0x1234; // 2바이트 저장
-	u_char p = static_cast<u_char>(d); // 1바이트 저장
 
-	if (p == 0x34)
+	//u_char p = static_cast<u_char>(d); // 1바이트 저장
+	//if (p == 0x34)
+	//	return TRUE;
+	//else
+	//	return FALSE;
+	
+	// ntoh를 사용하면 안된다.. n은 빅엔디안이므로 또다른 이상한 값이 나올것
+	if (htons(d) != 0x1234)
 		return TRUE;
 	else
 		return FALSE;
+
 }
 
 BOOL IsBigEndian()

@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     retval = bind(listen_sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
     if (retval == SOCKET_ERROR) err_quit("bind()");
 
-    // listen()
+    // listen()  
     retval = listen(listen_sock, SOMAXCONN);
     if (retval == SOCKET_ERROR) err_quit("listen()");
 

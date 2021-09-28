@@ -66,7 +66,8 @@ int main(int argc, char* argv[])
 
     // socket()
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock == INVALID_SOCKET) err_quit("socket()");
+    if (sock == INVALID_SOCKET) 
+        err_quit("socket()");
 
     // connect()
     SOCKADDR_IN serveraddr;

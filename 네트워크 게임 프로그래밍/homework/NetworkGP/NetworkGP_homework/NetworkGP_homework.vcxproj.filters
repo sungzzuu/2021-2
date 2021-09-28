@@ -18,7 +18,7 @@
     <ClCompile Include="3-1. ByteOrder.cpp">
       <Filter>3장</Filter>
     </ClCompile>
-    <ClCompile Include="3-2. IPAdder.cpp">
+    <ClCompile Include="3-2. IPAddr.cpp">
       <Filter>3장</Filter>
     </ClCompile>
     <ClCompile Include="HW_3-1.cpp">
@@ -29,6 +29,12 @@
     </ClCompile>
     <ClCompile Include="TCPClient.cpp">
       <Filter>4장</Filter>
+    </ClCompile>
+    <ClCompile Include="HW_4-8.cpp">
+      <Filter>4장</Filter>
+    </ClCompile>
+    <ClCompile Include="InitWinsock.cpp">
+      <Filter>2장</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
