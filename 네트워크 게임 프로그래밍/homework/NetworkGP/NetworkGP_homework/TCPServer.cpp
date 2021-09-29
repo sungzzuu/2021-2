@@ -45,7 +45,8 @@ int main(int argc, char* argv[])
 
     // socket()
     SOCKET listen_sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (listen_sock == INVALID_SOCKET) err_quit("socket()");
+    if (listen_sock == INVALID_SOCKET) 
+        err_quit("socket()");
 
     // bind()
     SOCKADDR_IN serveraddr;
@@ -58,9 +59,11 @@ int main(int argc, char* argv[])
 
     // listen()  
     retval = listen(listen_sock, SOMAXCONN);
-    if (retval == SOCKET_ERROR) err_quit("listen()");
+    if (retval == SOCKET_ERROR) 
+        err_quit("listen()");
 
     // 데이터 통신에 사용할 변수
+    // 소켓을 하나 더 만들어야함
     SOCKET client_sock;
     SOCKADDR_IN clientaddr;
     int addrlen;

@@ -36,5 +36,8 @@
     <ClCompile Include="InitWinsock.cpp">
       <Filter>2장</Filter>
     </ClCompile>
+    <ClCompile Include="NameResolution.cpp">
+      <Filter>3장</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

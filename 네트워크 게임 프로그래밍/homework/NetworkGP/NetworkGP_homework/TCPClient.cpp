@@ -10,7 +10,7 @@
 
 // 소켓 함수 오류 출력 후 종료
 void err_quit(char* msg)
-{
+{  
     LPVOID lpMsgBuf;
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
@@ -76,7 +76,8 @@ int main(int argc, char* argv[])
     serveraddr.sin_addr.s_addr = inet_addr(SERVERIP);
     serveraddr.sin_port = htons(SERVERPORT);
     retval = connect(sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
-    if (retval == SOCKET_ERROR) err_quit("connect()");
+    if (retval == SOCKET_ERROR) 
+        err_quit("connect()");
 
     // 데이터 통신에 사용할 변수
     char buf[BUFSIZE + 1];
