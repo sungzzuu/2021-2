@@ -10,6 +10,21 @@
     <Filter Include="4장">
       <UniqueIdentifier>{8b84620c-e634-41ec-8e34-53324c240653}</UniqueIdentifier>
     </Filter>
+    <Filter Include="5장">
+      <UniqueIdentifier>{4ec3316d-84b6-426b-ac7c-be9861a49bbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5장\1. Fixed">
+      <UniqueIdentifier>{a9408f07-fe7f-4f66-8074-857136d41ba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5장\2. Variable">
+      <UniqueIdentifier>{f9467605-b9e3-4ca1-9457-cad955814ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5장\3. FixedVariable">
+      <UniqueIdentifier>{5cdb469c-99e8-4d15-a847-98c5604619f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5장\4. CloseOnTransfer">
+      <UniqueIdentifier>{87d904d2-ea4e-4395-a88b-fa3a2b8876d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HW_2-1.cpp">
@@ -38,6 +53,24 @@
     </ClCompile>
     <ClCompile Include="NameResolution.cpp">
       <Filter>3장</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient_Fixed.cpp">
+      <Filter>5장\1. Fixed</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer_Fixed.cpp">
+      <Filter>5장\1. Fixed</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient_Variable.cpp">
+      <Filter>5장\2. Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer_Variable.cpp">
+      <Filter>5장\2. Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient_FixedVariable.cpp">
+      <Filter>5장\3. FixedVariable</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer_FixedVariable.cpp">
+      <Filter>5장\3. FixedVariable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
