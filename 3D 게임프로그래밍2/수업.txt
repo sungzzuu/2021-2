@@ -1,5 +1,0 @@
-3d겜플2
-2주차-2
-
-쉐이더 코드의 배열 인덱스에는 변수 사용 금지, 사용하려면
-NonUniformResourceIndex사용
