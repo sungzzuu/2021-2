@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameFramework.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="LabProject02(Init).h" />
     <ClInclude Include="Resource.h" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="LabProject02(Init).cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
