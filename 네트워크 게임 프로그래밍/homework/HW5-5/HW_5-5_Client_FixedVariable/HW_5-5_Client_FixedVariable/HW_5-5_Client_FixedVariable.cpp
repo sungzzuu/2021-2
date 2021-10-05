@@ -100,6 +100,7 @@ int main(int argc, char* argv[])
     }
 
     char* buf = new char[bufSize];
+    float percent = 0.f;
     for (int i = 0; i < cnt; ++i)
     {
         // 데이터 보내기 -> 고정 길이 - 파일 크기 -> 버퍼사이즈
@@ -117,9 +118,8 @@ int main(int argc, char* argv[])
             return 0;
         }
         // 데이터 보내기 -> 고정 길이 - 보낸길이
-        float percent = ((float)i / (float)cnt) * 100.f;
+        percent = ((float)i / (float)cnt) * 100.f;
         int p = (int)percent;
-        printf("%d\n", (int)p);
         retval = send(sock, (char*)&p, sizeof(int), 0); // 길이가 고정된 값이 아닌 가변인자인 len
         if (retval == SOCKET_ERROR) {
             err_display("send()");
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     }
 
     // 데이터 보내기 -> 고정 길이 - 보낸길이
-    int percent = 100;
+    percent = 100;
     retval = send(sock, (char*)&percent, sizeof(int), 0); // 길이가 고정된 값이 아닌 가변인자인 len
     if (retval == SOCKET_ERROR) {
         err_display("send()");
