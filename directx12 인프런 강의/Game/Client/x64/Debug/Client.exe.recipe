@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\2021-2\directx12 인프런 강의\Game\x64\Debug\Client.exe</FullPath>
+      <FullPath>D:\2021-2\directx12 인프런 강의\Game\Output\Client.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
