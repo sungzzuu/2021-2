@@ -1,9 +1,2 @@
-﻿  pch.cpp
-  CommandQueue.cpp
-  DescriptorHeap.cpp
-  Device.cpp
-  Engine.cpp
-  EnginePch.cpp
-  SwapChain.cpp
-  코드를 생성하고 있습니다...
+﻿  Engine.cpp
   Engine.vcxproj -> D:\2021-2\directx12 인프런 강의\Game\Output\Engine.lib

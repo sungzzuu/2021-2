@@ -52,9 +52,12 @@ struct WindowInfo
 
 };
 
-extern unique_ptr<class Engine> GEngine;
+enum
+{
+	SWAP_CHAIN_BUFFER_COUNT = 2
+};
 
-void HelloEngine();
+extern unique_ptr<class Engine> GEngine;
 
 
 
