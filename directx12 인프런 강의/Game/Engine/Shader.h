@@ -17,7 +17,7 @@ private:
 	ComPtr<ID3DBlob>					_psBlob;
 	ComPtr<ID3DBlob>					_errBlob;
 
-	ComPtr<ID3D12PipelineState>			_pipelineState;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC  _pipelineDesc = {};
+	ComPtr<ID3D12PipelineState>			m_pipelineState;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC  m_pipelineDesc = {};
 };
 

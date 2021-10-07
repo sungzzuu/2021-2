@@ -14,11 +14,15 @@ void Engine::Init(const WindowInfo& window)
 	m_cmdQueue = make_shared<CommandQueue>();
 	m_swapChain = make_shared<SwapChain>();
 	m_rootSignature = make_shared<RootSignature>();
+	m_cb = make_shared<ConstantBuffer>();
+	m_tableDescriptorHeap = make_shared<TableDescriptorHeap>();
 
 	m_device->Init();
 	m_cmdQueue->Init(m_device->GetDevice(), m_swapChain);
 	m_swapChain->Init(window, m_device->GetDevice(), m_device->GetDXGI(), m_cmdQueue->GetCmdQueue());
-	m_rootSignature->Init(m_device->GetDevice());
+	m_rootSignature->Init();
+	m_cb->Init(sizeof(Transform), 256);
+	m_tableDescriptorHeap->Init(256);
 }
 
 void Engine::Render()

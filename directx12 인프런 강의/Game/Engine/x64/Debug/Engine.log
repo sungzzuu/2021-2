@@ -1,1 +1,2 @@
-﻿  Engine.vcxproj -> D:\2021-2\directx12 인프런 강의\Game\Output\Engine.lib
+﻿  pch.cpp
+D:\2021-2\directx12 인프런 강의\Game\Engine\EnginePch.h(26,10): fatal error C1083: 포함 파일을 열 수 없습니다. 'DirectXTex/DirectXTex.h': No such file or directory

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CommandQueue.h"
 #include "SwapChain.h"
+#include "Engine.h"
 
 CommandQueue::~CommandQueue()
 {
@@ -29,6 +30,10 @@ void CommandQueue::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapC
 	// CommandList는 Close / Open 상태가 있는데
 	// Open 상태에서 Command를 넣다가 Close한 다음 제출하는 개념
 	m_cmdList->Close();
+
+	device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_resCmdAlloc));
+	device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_resCmdAlloc.Get(), nullptr, IID_PPV_ARGS(&m_resCmdList));
+
 
 	// CreateFence
 	// - CPU와 GPU의 동기화 수단으로 쓰인다
@@ -67,6 +72,14 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect)
 		D3D12_RESOURCE_STATE_PRESENT, // 화면 출력
 		D3D12_RESOURCE_STATE_RENDER_TARGET); // 외주 결과물
 
+	// 서명을 사용하겠다고 선포함!
+	m_cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get()); 
+	GEngine->GetCB()->Clear();
+	GEngine->GetTableDescriptorHeap()->Clear();
+
+	ID3D12DescriptorHeap* descHeap = GEngine->GetTableDescriptorHeap()->GetDescriptorHeap().Get();
+	m_cmdList->SetDescriptorHeaps(1, &descHeap);
+
 	m_cmdList->ResourceBarrier(1, &barrier);
 
 	// Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
@@ -101,4 +114,18 @@ void CommandQueue::RenderEnd()
 	WaitSync();
 
 	m_swapChain->SwapIndex();
+}
+
+void CommandQueue::FlushResourceCommandQueue()
+{
+	m_resCmdList->Close();
+
+	ID3D12CommandList* cmdListArr[] = { m_resCmdList.Get() };
+	m_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+
+	WaitSync();
+
+	m_resCmdAlloc->Reset();
+	m_resCmdList->Reset(m_resCmdAlloc.Get(), nullptr);
+	// 다시 사용할 준비
 }

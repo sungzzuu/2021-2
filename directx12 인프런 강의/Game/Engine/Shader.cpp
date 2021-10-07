@@ -10,28 +10,30 @@ void Shader::Init(const wstring& path)
 	D3D12_INPUT_ELEMENT_DESC desc[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
 	};
 
-	_pipelineDesc.InputLayout = { desc, _countof(desc) };
-	_pipelineDesc.pRootSignature = ROOT_SIGNATURE.Get();
+	m_pipelineDesc.InputLayout = { desc, _countof(desc) };
+	m_pipelineDesc.pRootSignature = ROOT_SIGNATURE.Get();
 
-	_pipelineDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	_pipelineDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	_pipelineDesc.DepthStencilState.DepthEnable = FALSE;
-	_pipelineDesc.DepthStencilState.StencilEnable = FALSE;
-	_pipelineDesc.SampleMask = UINT_MAX;
-	_pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	_pipelineDesc.NumRenderTargets = 1;
-	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-	_pipelineDesc.SampleDesc.Count = 1;
+	m_pipelineDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	m_pipelineDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	m_pipelineDesc.DepthStencilState.DepthEnable = FALSE;
+	m_pipelineDesc.DepthStencilState.StencilEnable = FALSE;
+	m_pipelineDesc.SampleMask = UINT_MAX;
+	m_pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	m_pipelineDesc.NumRenderTargets = 1;
+	m_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_pipelineDesc.SampleDesc.Count = 1;
 
-	DEVICE->CreateGraphicsPipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
+	DEVICE->CreateGraphicsPipelineState(&m_pipelineDesc, IID_PPV_ARGS(&m_pipelineState));
 }
 
 void Shader::Update()
 {
-	CMD_LIST->SetPipelineState(_pipelineState.Get());
+	CMD_LIST->SetPipelineState(m_pipelineState.Get());
 }
 
 void Shader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
@@ -52,10 +54,10 @@ void Shader::CreateShader(const wstring& path, const string& name, const string&
 
 void Shader::CreateVertexShader(const wstring& path, const string& name, const string& version)
 {
-	CreateShader(path, name, version, _vsBlob, _pipelineDesc.VS);
+	CreateShader(path, name, version, _vsBlob, m_pipelineDesc.VS);
 }
 
 void Shader::CreatePixelShader(const wstring& path, const string& name, const string& version)
 {
-	CreateShader(path, name, version, _psBlob, _pipelineDesc.PS);
+	CreateShader(path, name, version, _psBlob, m_pipelineDesc.PS);
 }
