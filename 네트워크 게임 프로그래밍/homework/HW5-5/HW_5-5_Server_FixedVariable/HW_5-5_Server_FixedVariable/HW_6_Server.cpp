@@ -5,9 +5,12 @@
 #include <stdio.h>
 #include <fstream>
 
-#define SERVERPORT 9002
+#define SERVERPORT 9000
 
-// 소켓 함수 오류 출력 후 종료
+int g_percent[2];
+int g_port[2];
+int g_cnt = 0;
+
 void err_quit(char* msg)
 {
     LPVOID lpMsgBuf;
@@ -21,7 +24,6 @@ void err_quit(char* msg)
     exit(1);
 }
 
-// 소켓 함수 오류 출력
 void err_display(char* msg)
 {
     LPVOID lpMsgBuf;
@@ -34,7 +36,6 @@ void err_display(char* msg)
     LocalFree(lpMsgBuf);
 }
 
-// 사용자 정의 데이터 수신 함수
 int recvn(SOCKET s, char* buf, int len, int flags)
 {
     int received;
@@ -54,8 +55,7 @@ int recvn(SOCKET s, char* buf, int len, int flags)
     return (len - left);
 }
 
-// 클라이언트와 데이터 통신
-DWORD WINAPI ProcessClient(LPVOID arg)
+void ProcessClient(LPVOID arg)
 {
     SOCKET client_sock = (SOCKET)arg;
     int retval;
@@ -73,6 +73,8 @@ DWORD WINAPI ProcessClient(LPVOID arg)
     // 클라이언트 정보 얻기
     addrlen = sizeof(clientaddr);
     getpeername(client_sock, (SOCKADDR*)&clientaddr, &addrlen);
+
+    g_port[g_cnt++] = ntohs(clientaddr.sin_port);
 
     // 클라이언트와 데이터 통신
     while (1) {
@@ -132,16 +134,32 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         else if (retval == 0)
             break;
 
-        // 전송률출력
-        printf("전송률: %d%%\r", percent);
-        delete[] buf;
+        //g_percent[threadNum] = percent;
+        if (percent != g_percent[0] || percent != g_percent[1])
+        {
+            if (percent >= 100)
+                percent = 100;
+            if (ntohs(clientaddr.sin_port) == g_port[0])
+                g_percent[0] = percent;
+            else
+                g_percent[1] = percent;
+            printf("클라이언트(%d) 전송률: %d%% \r\r\r\r\r", g_port[0], g_percent[0]);
+            if (g_port[1] != 0)
+            {
+                printf("\t\t\t\t\t\t클라이언트(%d) 전송률: %d%%\r\r\r\r\r\r\r\r\r\r\r\r\r", g_port[1], g_percent[1]);
 
+            }
+        }
+        delete[] buf;
     }
     delete[] fileNameBuf;
-    // closesocket()
     closesocket(client_sock);
-    printf("[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d\n",
-        inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+
+}
+// 클라이언트와 데이터 통신
+DWORD WINAPI MyThread1(LPVOID arg)
+{
+    ProcessClient(arg);
 
     return 0;
 }
@@ -150,16 +168,13 @@ int main(int argc, char* argv[])
 {
     int retval;
 
-    // 윈속 초기화
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
         return 1;
 
-    // socket()
     SOCKET listen_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (listen_sock == INVALID_SOCKET) err_quit("socket()");
 
-    // bind()
     SOCKADDR_IN serveraddr;
     ZeroMemory(&serveraddr, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
@@ -168,18 +183,18 @@ int main(int argc, char* argv[])
     retval = bind(listen_sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
     if (retval == SOCKET_ERROR) err_quit("bind()");
 
-    // listen()
     retval = listen(listen_sock, SOMAXCONN);
     if (retval == SOCKET_ERROR) err_quit("listen()");
 
-    // 데이터 통신에 사용할 변수
     SOCKET client_sock;
     SOCKADDR_IN clientaddr;
     int addrlen;
-    HANDLE hThread;
-   
-    while (1) {
-        // accept()
+    HANDLE hThread = nullptr;
+    int cnt = 0;
+
+    while(1)
+    {
+        cnt++;
         addrlen = sizeof(clientaddr);
         client_sock = accept(listen_sock, (SOCKADDR*)&clientaddr, &addrlen);
         if (client_sock == INVALID_SOCKET) {
@@ -187,13 +202,14 @@ int main(int argc, char* argv[])
             break;
         }
 
-        // 접속한 클라이언트 정보 출력
-        printf("\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\n",
-            inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
-
-        // 스레드 생성
-        hThread = CreateThread(NULL, 0, ProcessClient,
+        hThread = CreateThread(NULL, 0, MyThread1,
             (LPVOID)client_sock, 0, NULL);
+
+        if (cnt == 2)
+        {
+            if (hThread != NULL && WaitForSingleObject(hThread, INFINITE) != WAIT_FAILED)
+                break;
+        }
 
         if (hThread == NULL)
         {
@@ -202,14 +218,12 @@ int main(int argc, char* argv[])
         else {
             CloseHandle(hThread);
         }
+
+        
     }
 
-    // closesocket()
     closesocket(listen_sock);
 
-    // 윈속 종료
     WSACleanup();
 
-
-    return 0;
 }
