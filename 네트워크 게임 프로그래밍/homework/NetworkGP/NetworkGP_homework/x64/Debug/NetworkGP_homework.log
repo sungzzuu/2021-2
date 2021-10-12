@@ -1,0 +1,233 @@
+﻿  3-1. ByteOrder.cpp
+  3-2. IPAddr.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(15,34): error C2440: '초기화 중': 'const char [14]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(15,17): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(28,60): error C2440: '초기화 중': 'const char [40]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(28,17): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(34,2): error C2664: 'INT WSAStringToAddressW(LPWSTR,INT,LPWSAPROTOCOL_INFOW,LPSOCKADDR,LPINT)': 인수 1을(를) 'char *'에서 'LPWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(34,21): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\WinSock2.h(3577,1): message : 'WSAStringToAddressW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(44,83): error C2664: 'INT WSAAddressToStringW(LPSOCKADDR,DWORD,LPWSAPROTOCOL_INFOW,LPWSTR,LPDWORD)': 인수 4을(를) 'char [50]'에서 'LPWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\3-2. IPAddr.cpp(44,65): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\WinSock2.h(3518,1): message : 'WSAAddressToStringW' 선언을 참조하십시오.
+  ExThread1.cpp
+  HW_3-1.cpp
+  HW_2-1.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\HW_2-1.cpp(13,64): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 2을(를) 'const char [17]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\HW_2-1.cpp(13,22): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+  InitWinsock.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(14,55): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(14,38): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(26,61): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 2을(를) 'const char [17]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(26,19): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(31,22): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(31,12): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(4,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(32,62): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 2을(를) 'const char [19]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\InitWinsock.cpp(32,19): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+  MultithreadTCPServer.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(19,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(19,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(54,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(54,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(68,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(68,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(92,59): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(92,49): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(101,50): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(101,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(105,52): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(105,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(118,35): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(118,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\MultithreadTCPServer.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+  NameResolution.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(28,32): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [16]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(28,15): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(10,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(44,38): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [16]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(44,21): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(10,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(50,5): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(66,8): error C2664: 'BOOL GetIPAddr(char *,IN_ADDR *)': 인수 1을(를) 'const char [16]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(66,19): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\NameResolution.cpp(23,6): message : 'GetIPAddr' 선언을 참조하십시오.
+  TCPClient.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(20,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(20,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(70,28): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(70,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(12,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(80,29): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [10]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(80,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(12,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(94,26): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(101,48): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(103,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(103,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(26,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(111,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(111,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient.cpp(26,6): message : 'err_display' 선언을 참조하십시오.
+  TCPClient_Fixed.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(21,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(21,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(51,28): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(51,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(61,29): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [10]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(61,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(66,9): error C2440: '초기화 중': 'const char [11]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(66,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(67,9): error C2440: '초기화 중': 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(67,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(68,9): error C2440: '초기화 중': 'const char [36]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(68,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(69,9): error C2440: '초기화 중': 'const char [14]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(69,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(82,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(82,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Fixed.cpp(27,6): message : 'err_display' 선언을 참조하십시오.
+  TCPClient_FixedVariable.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(21,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(21,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(51,28): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(51,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(61,29): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [10]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(61,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(66,9): error C2440: '초기화 중': 'const char [11]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(66,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(67,9): error C2440: '초기화 중': 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(67,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(68,9): error C2440: '초기화 중': 'const char [36]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(68,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(69,9): error C2440: '초기화 중': 'const char [14]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(69,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(77,34): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(83,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(83,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(27,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(90,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(90,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_FixedVariable.cpp(27,6): message : 'err_display' 선언을 참조하십시오.
+  TCPClient_Variable.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(21,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(21,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(50,52): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(50,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(59,53): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [10]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(59,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(64,9): error C2440: '초기화 중': 'const char [11]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(64,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(65,9): error C2440: '초기화 중': 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(65,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(66,9): error C2440: '초기화 중': 'const char [36]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(66,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(67,9): error C2440: '초기화 중': 'const char [14]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(67,9): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(74,34): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(81,33): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(81,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPClient_Variable.cpp(27,6): message : 'err_display' 선언을 참조하십시오.
+  TCPServer.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(19,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(19,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(49,28): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(49,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(58,50): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(58,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(63,28): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(63,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(77,35): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(77,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(90,37): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(90,29): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(104,37): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(104,29): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+  TCPServer_Fixed.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(21,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(21,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(71,29): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [10]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(71,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(81,26): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(81,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(86,28): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(86,18): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(13,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(101,35): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(101,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(27,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(116,37): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(116,29): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Fixed.cpp(27,6): message : 'err_display' 선언을 참조하십시오.
+  TCPServer_FixedVariable.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(19,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(19,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(68,59): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(68,49): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(77,50): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(77,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(81,52): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(81,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(95,35): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(95,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(108,37): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(108,29): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(117,37): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(117,29): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_FixedVariable.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+  TCPServer_Variable.cpp
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(19,58): error C2664: 'int MessageBoxW(HWND,LPCWSTR,LPCWSTR,UINT)': 인수 3을(를) 'char *'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(19,41): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9161,1): message : 'MessageBoxW' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(95,59): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(95,49): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(104,50): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(104,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(108,52): error C2664: 'void err_quit(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(108,42): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(11,6): message : 'err_quit' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(121,35): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [9]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(121,25): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(134,37): error C2664: 'void err_display(char *)': 인수 1을(를) 'const char [7]'에서 'char *'(으)로 변환할 수 없습니다.
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(134,29): message : 문자열 리터럴로부터의 변환은 const 한정자가 손실됩니다(/Zc:strictStrings 참조).
+C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\TCPServer_Variable.cpp(25,6): message : 'err_display' 선언을 참조하십시오.
+  코드를 생성하고 있습니다...

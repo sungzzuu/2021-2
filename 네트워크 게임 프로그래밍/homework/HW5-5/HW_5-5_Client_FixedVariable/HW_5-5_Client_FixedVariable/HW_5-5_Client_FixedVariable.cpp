@@ -7,7 +7,7 @@
 #include <fstream>
 
 #define SERVERIP    "127.0.0.1"
-#define SERVERPORT  9000
+#define SERVERPORT  9002
 // 소켓 함수 오류 출력 후 종료
 void err_quit(char* msg)
 {

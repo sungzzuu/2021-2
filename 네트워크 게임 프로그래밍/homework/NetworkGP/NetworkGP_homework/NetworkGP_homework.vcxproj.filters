@@ -25,6 +25,9 @@
     <Filter Include="5장\4. CloseOnTransfer">
       <UniqueIdentifier>{87d904d2-ea4e-4395-a88b-fa3a2b8876d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="6장">
+      <UniqueIdentifier>{1f264a0e-0f97-44cb-97ba-1f80d8f330bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HW_2-1.cpp">
@@ -71,6 +74,12 @@
     </ClCompile>
     <ClCompile Include="TCPServer_FixedVariable.cpp">
       <Filter>5장\3. FixedVariable</Filter>
+    </ClCompile>
+    <ClCompile Include="ExThread1.cpp">
+      <Filter>6장</Filter>
+    </ClCompile>
+    <ClCompile Include="MultithreadTCPServer.cpp">
+      <Filter>6장</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
