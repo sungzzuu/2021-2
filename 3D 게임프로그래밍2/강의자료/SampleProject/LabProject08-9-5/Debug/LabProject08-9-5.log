@@ -1,0 +1,27 @@
+﻿  Camera.cpp
+  DDSTextureLoader12.cpp
+  GameFramework.cpp
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\GameFramework.cpp(120,69): error C2664: 'int MessageBoxA(HWND,LPCSTR,LPCSTR,UINT)': 인수 2을(를) 'const wchar_t [30]'에서 'LPCSTR'(으)로 변환할 수 없습니다.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\GameFramework.cpp(120,20): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9153,1): message : 'MessageBoxA' 선언을 참조하십시오.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\GameFramework.cpp(169,77): error C2664: 'int MessageBoxA(HWND,LPCSTR,LPCSTR,UINT)': 인수 2을(를) 'const wchar_t [38]'에서 'LPCSTR'(으)로 변환할 수 없습니다.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\GameFramework.cpp(169,20): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winuser.h(9153,1): message : 'MessageBoxA' 선언을 참조하십시오.
+  LabProject08-9-5.cpp
+  Mesh.cpp
+  Object.cpp
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Shader.cpp(585,97): error C2664: 'CRawFormatImage::CRawFormatImage(LPCTSTR,int,int,bool)': 인수 1을(를) 'const wchar_t [21]'에서 'LPCTSTR'(으)로 변환할 수 없습니다.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Shader.cpp(585,57): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Mesh.h(207,2): message : 'CRawFormatImage::CRawFormatImage' 선언을 참조하십시오.
+  stdafx.cpp
+  Timer.cpp
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Timer.cpp(76,65): error C2664: 'errno_t _itow_s(int,wchar_t *,size_t,int)': 인수 2을(를) 'LPTSTR'에서 'wchar_t *'(으)로 변환할 수 없습니다.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Timer.cpp(76,38): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_wstdlib.h(54,30): message : '_itow_s' 선언을 참조하십시오.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Timer.cpp(77,54): error C2664: 'errno_t wcscat_s(wchar_t *,rsize_t,const wchar_t *)': 인수 1을(를) 'LPTSTR'에서 'wchar_t *'(으)로 변환할 수 없습니다.
+C:\Users\ysj\Downloads\LabProject08-9-5 (1)\Timer.cpp(77,18): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_wstring.h(32,30): message : 'wcscat_s' 선언을 참조하십시오.
+  코드를 생성하고 있습니다...
