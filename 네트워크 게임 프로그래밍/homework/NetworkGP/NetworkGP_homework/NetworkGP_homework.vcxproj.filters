@@ -81,5 +81,8 @@
     <ClCompile Include="MultithreadTCPServer.cpp">
       <Filter>6장</Filter>
     </ClCompile>
+    <ClCompile Include="ExEvent.cpp">
+      <Filter>6장</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
