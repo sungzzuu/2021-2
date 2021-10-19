@@ -1,2 +1,4 @@
-﻿  ExEvent.cpp
-  NetworkGP_homework.vcxproj -> C:\Users\윤성주\OneDrive\바탕 화면\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\Debug\NetworkGP_homework.exe
+﻿  UDPClient.cpp
+D:\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\UDPClient.cpp(42,13): warning C4101: 'wsa' :참조되지 않은 지역 변수입니다.
+D:\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\NetworkGP_homework\UDPClient.cpp(40,9): warning C4101: 'retval' :참조되지 않은 지역 변수입니다.
+  NetworkGP_homework.vcxproj -> D:\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\Debug\NetworkGP_homework.exe

@@ -28,6 +28,9 @@
     <Filter Include="6장">
       <UniqueIdentifier>{1f264a0e-0f97-44cb-97ba-1f80d8f330bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="7장">
+      <UniqueIdentifier>{e1359462-4217-4a23-95a7-150e7d91262a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HW_2-1.cpp">
@@ -83,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="ExEvent.cpp">
       <Filter>6장</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPClient.cpp">
+      <Filter>7장</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

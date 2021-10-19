@@ -97,14 +97,14 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
 	m_ppShaders[0] = pObjectShader;
 
-	m_nEnvironmentMappingShaders = 1;
+	/*m_nEnvironmentMappingShaders = 1;
 	m_ppEnvironmentMappingShaders = new CDynamicCubeMappingShader * [m_nEnvironmentMappingShaders];
 
 	m_ppEnvironmentMappingShaders[0] = new CDynamicCubeMappingShader(256);
 	m_ppEnvironmentMappingShaders[0]->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
 	m_ppEnvironmentMappingShaders[0]->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
 
-	BuildLightsAndMaterials();
+	BuildLightsAndMaterials();*/
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
@@ -314,21 +314,21 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 
 void CScene::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
-	m_pd3dcbLights = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	//UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	//m_pd3dcbLights = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	m_pd3dcbLights->Map(0, NULL, (void**)&m_pcbMappedLights);
+	//m_pd3dcbLights->Map(0, NULL, (void**)&m_pcbMappedLights);
 
-	UINT ncbMaterialBytes = ((sizeof(MATERIALS) + 255) & ~255); //256의 배수
-	m_pd3dcbMaterials = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	//UINT ncbMaterialBytes = ((sizeof(MATERIALS) + 255) & ~255); //256의 배수
+	//m_pd3dcbMaterials = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	m_pd3dcbMaterials->Map(0, NULL, (void**)&m_pcbMappedMaterials);
+	//m_pd3dcbMaterials->Map(0, NULL, (void**)&m_pcbMappedMaterials);
 }
 
 void CScene::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	if (m_pcbMappedLights) ::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
-	if (m_pcbMappedMaterials) ::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIALS));
+	//if (m_pcbMappedLights) ::memcpy(m_pcbMappedLights, m_pLights, sizeof(LIGHTS));
+	//if (m_pcbMappedMaterials) ::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIALS));
 }
 
 void CScene::ReleaseShaderVariables()

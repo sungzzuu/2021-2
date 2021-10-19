@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <ProjectOutputs>C:\Users\윤성주\OneDrive\바탕 화면\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\Debug\NetworkGP_homework.exe</ProjectOutputs>
-  <ContentFiles></ContentFiles>
-  <SatelliteDlls></SatelliteDlls>
-  <NonRecipeFileRefs></NonRecipeFileRefs>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\2021-2\네트워크 게임 프로그래밍\homework\NetworkGP\Debug\NetworkGP_homework.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
 </Project>
