@@ -1,0 +1,14 @@
+﻿  Camera.cpp
+  DDSTextureLoader12.cpp
+  GameFramework.cpp
+  LabProject08-2-1.cpp
+  Mesh.cpp
+  Object.cpp
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\[[샘플프로젝트]스카이박스디테일텍스쳐링]_files\LabProject08-2-1\Shader.cpp(429,19): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  stdafx.cpp
+  Timer.cpp
+  코드를 생성하고 있습니다...
+  LabProject08-2-1.vcxproj -> D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject08-2-1.exe
