@@ -28,6 +28,9 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Image/HeightMap.raw"), 257, 257, 257, 257, xmf3Scale, xmf4Color);
 #endif
 
+	m_pSkyBox = new CSkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+
+
 	m_pTerrainWater = new CTerrainWater(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 257 * xmf3Scale.x, 257 * xmf3Scale.z);
 	m_pTerrainWater->SetPosition(+(257 * xmf3Scale.x * 0.5f), 155.0f, +(257 * xmf3Scale.z * 0.5f));
 
@@ -61,13 +64,16 @@ void CScene::ReleaseObjects()
 	ReleaseShaderVariables();
 
 	if (m_pTerrain) delete m_pTerrain;
+	if (m_pSkyBox) delete m_pSkyBox;
 	if (m_pTerrainWater) delete m_pTerrainWater;
+
 }
 
 void CScene::ReleaseUploadBuffers()
 {
 	for (int i = 0; i < m_nShaders; i++) m_ppShaders[i]->ReleaseUploadBuffers();
 	if (m_pTerrain) m_pTerrain->ReleaseUploadBuffers();
+	if (m_pSkyBox) m_pSkyBox->ReleaseUploadBuffers();
 	if (m_pTerrainWater) m_pTerrainWater->ReleaseUploadBuffers();
 }
 
@@ -75,7 +81,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 {
 	ID3D12RootSignature *pd3dGraphicsRootSignature = NULL;
 
-	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[4];
+	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[5];
 
 	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	pd3dDescriptorRanges[0].NumDescriptors = 1;
@@ -101,7 +107,14 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dDescriptorRanges[3].RegisterSpace = 0;
 	pd3dDescriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	D3D12_ROOT_PARAMETER pd3dRootParameters[8];
+	pd3dDescriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[4].NumDescriptors = 1;
+	pd3dDescriptorRanges[4].BaseShaderRegister = 9; //t9: gtxtSkyBoxTexture
+	pd3dDescriptorRanges[4].RegisterSpace = 0;
+	pd3dDescriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+
+	D3D12_ROOT_PARAMETER pd3dRootParameters[9];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 0; //Player
@@ -145,34 +158,53 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[7].Constants.RegisterSpace = 0;
 	pd3dRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	D3D12_STATIC_SAMPLER_DESC d3dSamplerDesc;
-	::ZeroMemory(&d3dSamplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
-	d3dSamplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	d3dSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	d3dSamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	d3dSamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	d3dSamplerDesc.MipLODBias = 0;
-	d3dSamplerDesc.MaxAnisotropy = 1;
-	d3dSamplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	d3dSamplerDesc.MinLOD = 0;
-	d3dSamplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	d3dSamplerDesc.ShaderRegister = 0;
-	d3dSamplerDesc.RegisterSpace = 0;
-	d3dSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dRootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[8].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[8].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[4];
+	pd3dRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
+
+	pd3dSamplerDescs[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	pd3dSamplerDescs[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	pd3dSamplerDescs[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	pd3dSamplerDescs[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	pd3dSamplerDescs[0].MipLODBias = 0;
+	pd3dSamplerDescs[0].MaxAnisotropy = 1;
+	pd3dSamplerDescs[0].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	pd3dSamplerDescs[0].MinLOD = 0;
+	pd3dSamplerDescs[0].MaxLOD = D3D12_FLOAT32_MAX;
+	pd3dSamplerDescs[0].ShaderRegister = 0;
+	pd3dSamplerDescs[0].RegisterSpace = 0;
+	pd3dSamplerDescs[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	pd3dSamplerDescs[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	pd3dSamplerDescs[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	pd3dSamplerDescs[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	pd3dSamplerDescs[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	pd3dSamplerDescs[1].MipLODBias = 0;
+	pd3dSamplerDescs[1].MaxAnisotropy = 1;
+	pd3dSamplerDescs[1].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	pd3dSamplerDescs[1].MinLOD = 0;
+	pd3dSamplerDescs[1].MaxLOD = D3D12_FLOAT32_MAX;
+	pd3dSamplerDescs[1].ShaderRegister = 1;
+	pd3dSamplerDescs[1].RegisterSpace = 0;
+	pd3dSamplerDescs[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 	D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
 	::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
 	d3dRootSignatureDesc.NumParameters = _countof(pd3dRootParameters);
 	d3dRootSignatureDesc.pParameters = pd3dRootParameters;
-	d3dRootSignatureDesc.NumStaticSamplers = 1;
-	d3dRootSignatureDesc.pStaticSamplers = &d3dSamplerDesc;
+	d3dRootSignatureDesc.NumStaticSamplers = _countof(pd3dSamplerDescs);
+	d3dRootSignatureDesc.pStaticSamplers = pd3dSamplerDescs;
 	d3dRootSignatureDesc.Flags = d3dRootSignatureFlags;
 
 	ID3DBlob *pd3dSignatureBlob = NULL;
 	ID3DBlob *pd3dErrorBlob = NULL;
 	D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
-	pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void **)&pd3dGraphicsRootSignature);
+	pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(),
+		__uuidof(ID3D12RootSignature), (void **)&pd3dGraphicsRootSignature);
 	if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
 	if (pd3dErrorBlob) pd3dErrorBlob->Release();
 
@@ -226,10 +258,13 @@ void CScene::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 
 void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
 {
+
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 
 	UpdateShaderVariables(pd3dCommandList);
+
+	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
 
 	if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
 	if (m_pTerrainWater) m_pTerrainWater->Render(pd3dCommandList, pCamera);
