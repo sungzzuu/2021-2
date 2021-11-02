@@ -1,0 +1,15 @@
+﻿  Camera.cpp
+  GameFramework.cpp
+  GameObject.cpp
+  LabProject12.cpp
+  Mesh.cpp
+C:\Users\ysj\Desktop\LabProject12\Mesh.cpp(687,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+C:\Users\ysj\Desktop\LabProject12\Shader.cpp(465,27): warning C4101: 'xmf3SurfaceNormal' :참조되지 않은 지역 변수입니다.
+C:\Users\ysj\Desktop\LabProject12\Shader.cpp(465,11): warning C4101: 'xmf3RotateAxis' :참조되지 않은 지역 변수입니다.
+  stdafx.cpp
+  Timer.cpp
+  코드를 생성하고 있습니다...
+  LabProject12.vcxproj -> C:\Users\ysj\Desktop\LabProject12\Debug\LabProject12.exe

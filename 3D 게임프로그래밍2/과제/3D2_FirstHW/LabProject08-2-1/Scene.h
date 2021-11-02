@@ -43,6 +43,7 @@ protected:
 	int							m_nShaders = 0;
 
 	CHeightMapTerrain			*m_pTerrain = NULL;
+	CSkyBox						*m_pSkyBox = NULL;
 
 	CTerrainWater				*m_pTerrainWater = NULL;
 	XMFLOAT4X4					m_xmf4x4WaterAnimation;

@@ -59,6 +59,7 @@ float4 PSPlayer(VS_DIFFUSED_OUTPUT input) : SV_TARGET
 //
 Texture2D gtxtTexture : register(t0);
 SamplerState gSamplerState : register(s0);
+SamplerState gClampSamplerState : register(s1);
 
 struct VS_TEXTURED_INPUT
 {
@@ -240,4 +241,13 @@ float4 PSTerrainWater(VS_WATER_OUTPUT input) : SV_TARGET
 	return(cColor);
 }
 #endif
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Texture2D gtxtSkyBox : register(t9);
+
+float4 PSSkyBox(VS_TEXTURED_OUTPUT input) : SV_TARGET
+{
+	float4 cColor = gtxtSkyBox.Sample(gClampSamplerState, input.uv);
+
+	return(cColor);
+}
