@@ -140,7 +140,7 @@ protected:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 protected:
 	XMFLOAT3						m_xmf3MoveDir = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
+	bool							m_bAlive = false;	// Render 여부 결정
 
 public:
 	void SetMesh(int nIndex, CMesh *pMesh);
@@ -181,8 +181,10 @@ public:
 
 	void MoveByDir(float fDistance);
 	XMFLOAT3 GetDir();
-	void SetDir(XMFLOAT3 vDir) { m_xmf3MoveDir = vDir; }
+	void SetDir(XMFLOAT3 xmf3Dir) { m_xmf3MoveDir = xmf3Dir; }
 
+	void SetAlive(bool bAlive) { m_bAlive = bAlive; }
+	void Awake(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Dir); // 총알 깨우는 함수
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -126,12 +126,22 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera);
 
-protected:
-	CGameObject						**m_ppObjects = 0;
-	int								m_nObjects = 0;
 
+
+public:
+	void AddAliveObject(OBJ_INDEX eIndex);
+	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
+
+protected:
+	vector<vector<CGameObject*>>	m_vecObjects;
+	int								m_nObjects;
 	ID3D12Resource					*m_pd3dcbGameObjects = NULL;
 	CB_GAMEOBJECT_INFO				*m_pcbMappedGameObjects = NULL;
+
+	list<CGameObject*>				m_listAliveObject[OBJ_INDEX::END];
+
+	CPlayer* m_pPlayer = NULL;
+
 
 #ifdef _WITH_BATCH_MATERIAL
 	CMaterial						*m_pMaterial = NULL;

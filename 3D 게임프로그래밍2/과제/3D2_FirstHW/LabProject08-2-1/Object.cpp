@@ -294,6 +294,8 @@ void CGameObject::Animate(float fTimeElapsed)
 
 void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
 {
+	// Render 여부 판정
+
 	OnPrepareRender();
 
 	if (m_pMaterial)
@@ -370,6 +372,13 @@ XMFLOAT3 CGameObject::GetRight()
 XMFLOAT3 CGameObject::GetDir()
 {
 	return(Vector3::Normalize(m_xmf3MoveDir));
+}
+
+void CGameObject::Awake(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Dir)
+{
+	SetPosition(xmf3Position);
+	SetDir(xmf3Dir);
+	SetAlive(true);
 }
 
 void CGameObject::MoveStrafe(float fDistance)
@@ -649,7 +658,7 @@ void CSkyBox::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamer
 
 CBullet::CBullet(int nMeshes)
 {
-	m_fSpeed = 80.f;
+	m_fSpeed = 20.f;
 	m_fCreateTime = 0.f;
 }
 
@@ -664,9 +673,11 @@ void CBullet::Animate(float fTimeElapsed)
 	Rotate(200.f * fTimeElapsed, 300.f * fTimeElapsed, 200.f * fTimeElapsed);
 	//UpdateBoundingBox();
 
-	// 플레이어에서 멀어지면 삭제
+	// 플레이어에서 멀어지면 렌더 안하기
 	m_fCreateTime += fTimeElapsed;
-	//if (m_fCreateTime > 10.f)
-	//	return OBJ_DEAD;
-	//return OBJ_NONE;
+	if (m_fCreateTime > 10.f)
+	{
+		SetAlive(false);
+	}
 }
+

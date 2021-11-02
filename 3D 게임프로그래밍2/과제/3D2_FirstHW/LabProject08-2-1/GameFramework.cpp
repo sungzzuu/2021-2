@@ -376,7 +376,15 @@ LRESULT CALLBACK CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMess
 	case WM_SIZE:
 		break;
 	case WM_LBUTTONDOWN:
+		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+
+		break;
 	case WM_RBUTTONDOWN:
+		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+
+		m_pScene->AddBullet();
+
+		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 	case WM_MOUSEMOVE:
@@ -425,9 +433,10 @@ void CGameFramework::BuildObjects()
 	m_pScene = new CScene();
 	m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 
-	m_pScene->m_pPlayer = m_pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->GetTerrain(), 1);
-	m_pCamera = m_pPlayer->GetCamera();
 
+	CPlayer* pPlayer = m_pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->GetTerrain(), 1);
+	m_pCamera = m_pPlayer->GetCamera();
+	m_pScene->SetPlayer(pPlayer);
 	m_pd3dCommandList->Close();
 	ID3D12CommandList *ppd3dCommandLists[] ={ m_pd3dCommandList };
 	m_pd3dCommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);

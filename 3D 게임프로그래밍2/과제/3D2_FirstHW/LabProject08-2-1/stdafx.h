@@ -22,8 +22,8 @@
 #include <dxgi1_4.h>
 #include <D3Dcompiler.h>
 #include <DirectXMath.h>
-#include <DirectXPackedVector.h>
-#include <DirectXColors.h>
+#include <DirectXPackedVector.h>
+#include <DirectXColors.h>
 #include <DirectXCollision.h>
 
 #include <Mmsystem.h>
@@ -33,7 +33,10 @@
 #include <memory.h>
 #include <wrl.h>
 
+using namespace std;
 #include <vector>
+#include <list>
+#include "define.h"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;

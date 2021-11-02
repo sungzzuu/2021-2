@@ -36,6 +36,11 @@ public:
 
 	CHeightMapTerrain *GetTerrain() { return(m_pTerrain); }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	void AddBullet();
+	void SetPlayer(CPlayer* pPlayer);
+
 	CPlayer						*m_pPlayer = NULL;
 
 protected:
