@@ -133,7 +133,9 @@ public:
 	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
 
 protected:
-	vector<vector<CGameObject*>>	m_vecObjects;
+	vector<CGameObject*>			m_vecObjects[OBJ_INDEX::END];
+	int								m_iAlliveNum[OBJ_INDEX::END];
+
 	int								m_nObjects;
 	ID3D12Resource					*m_pd3dcbGameObjects = NULL;
 	CB_GAMEOBJECT_INFO				*m_pcbMappedGameObjects = NULL;

@@ -184,6 +184,7 @@ public:
 	void SetDir(XMFLOAT3 xmf3Dir) { m_xmf3MoveDir = xmf3Dir; }
 
 	void SetAlive(bool bAlive) { m_bAlive = bAlive; }
+	bool GetAlive() { return m_bAlive; }
 	void Awake(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Dir); // ÃÑ¾Ë ±ú¿ì´Â ÇÔ¼ö
 };
 

@@ -351,7 +351,7 @@ void CObjectsShader::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dComman
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	int cnt = 0;
-	for (int i = 0; i < m_vecObjects.size(); i++)
+	for (int i = 0; i < OBJ_INDEX::END; i++)
 	{
 		for (int j = 0; j < m_vecObjects[i].size(); j++)
 		{
@@ -402,8 +402,6 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 
 	CCubeMeshTextured *pCubeMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 3.0f, 3.0f, 3.0f);
 
-	vector<CGameObject*> vecBullet;
-
 	CBullet *pBullet = NULL;
 
 	for (int i = 0; i < ibulletNum; ++i)
@@ -417,22 +415,20 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 		pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 		pBullet->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
-		vecBullet.push_back(pBullet);
+		m_vecObjects[OBJ_INDEX::BULLET].push_back(pBullet);
 	}
-	m_vecObjects.push_back(vecBullet);
 }
 
 void CObjectsShader::ReleaseObjects()
 {
-	for (auto& vec : m_vecObjects)
+	for (int i = 0; i < OBJ_INDEX::END; ++i)
 	{
-		for (auto& object : vec)
+		for (auto& object : m_vecObjects[i])
 		{
 			delete object;
 		}
-		vec.clear();
+		m_vecObjects[i].clear();
 	}
-	m_vecObjects.clear();
 	
 
 #ifdef _WITH_BATCH_MATERIAL
@@ -442,21 +438,33 @@ void CObjectsShader::ReleaseObjects()
 
 void CObjectsShader::AnimateObjects(float fTimeElapsed)
 {
+	//for (int i = 0; i < OBJ_INDEX::END; ++i)
+	//{
+	//	for (auto& object : m_listAliveObject[i])
+	//	{
+	//		object->Animate(fTimeElapsed);
+	//	}
+	//}
 	for (int i = 0; i < OBJ_INDEX::END; ++i)
 	{
-		for (auto& object : m_listAliveObject[i])
+		for (auto& object : m_vecObjects[i])
 		{
-			object->Animate(fTimeElapsed);
+			if (object->GetAlive())
+			{
+				object->Animate(fTimeElapsed);
+				if (!object->GetAlive())
+					m_iAlliveNum[i]--;
+			}
+
 		}
 	}
-
 }
 
 void CObjectsShader::ReleaseUploadBuffers()
 {
-	for (auto& vec : m_vecObjects)
+	for (int i = 0; i < OBJ_INDEX::END; ++i)
 	{
-		for (auto& object : vec)
+		for (auto& object : m_vecObjects[i])
 		{
 			object->ReleaseUploadBuffers();
 		}
@@ -475,22 +483,33 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera 
 	if (m_pMaterial) m_pMaterial->UpdateShaderVariables(pd3dCommandList);
 #endif
 
+	//for (int i = 0; i < OBJ_INDEX::END; ++i)
+	//{
+	//	for (auto& object : m_listAliveObject[i])
+	//	{
+	//		object->Render(pd3dCommandList, pCamera);
+	//	}
+	//}
+
 	for (int i = 0; i < OBJ_INDEX::END; ++i)
 	{
-		for (auto& object : m_listAliveObject[i])
+		for (auto& object : m_vecObjects[i])
 		{
-			object->Render(pd3dCommandList, pCamera);
+			if (object->GetAlive())
+				object->Render(pd3dCommandList, pCamera);
 		}
 	}
 }
 
 void CObjectsShader::AddAliveObject(OBJ_INDEX eIndex)
 {
-	int index = m_listAliveObject[eIndex].size();
+	//int index = m_listAliveObject[eIndex].size();
 
-	CGameObject* pObject = m_vecObjects[eIndex][index];
+	CGameObject* pObject = m_vecObjects[eIndex][m_iAlliveNum[eIndex]];
 	pObject->Awake(m_pPlayer->GetPosition(), m_pPlayer->GetLook());
-	m_listAliveObject[eIndex].push_back(pObject);
+	m_iAlliveNum[eIndex]++;
+
+	//m_listAliveObject[eIndex].push_back(pObject);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
