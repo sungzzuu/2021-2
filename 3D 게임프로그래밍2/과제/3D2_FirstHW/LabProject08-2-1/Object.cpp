@@ -367,6 +367,11 @@ XMFLOAT3 CGameObject::GetRight()
 	return(Vector3::Normalize(XMFLOAT3(m_xmf4x4World._11, m_xmf4x4World._12, m_xmf4x4World._13)));
 }
 
+XMFLOAT3 CGameObject::GetDir()
+{
+	return(Vector3::Normalize(m_xmf3MoveDir));
+}
+
 void CGameObject::MoveStrafe(float fDistance)
 {
 	XMFLOAT3 xmf3Position = GetPosition();
@@ -401,6 +406,14 @@ void CGameObject::Rotate(XMFLOAT3 *pxmf3Axis, float fAngle)
 {
 	XMMATRIX mtxRotate = XMMatrixRotationAxis(XMLoadFloat3(pxmf3Axis), XMConvertToRadians(fAngle));
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
+}
+void CGameObject::MoveByDir(float fDistance)
+{
+	XMFLOAT3 xmf3Position = GetPosition();
+	XMFLOAT3 xmf3Dir = GetDir();
+
+	xmf3Position = Vector3::Add(xmf3Position, xmf3Dir, fDistance);
+	CGameObject::SetPosition(xmf3Position);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -630,4 +643,30 @@ void CSkyBox::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamer
 			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(pd3dCommandList);
 		}
 	}
+}
+
+/////////////////////////////////////////////////////////////////ADD////////////////////////////////////
+
+CBullet::CBullet(int nMeshes)
+{
+	m_fSpeed = 80.f;
+	m_fCreateTime = 0.f;
+}
+
+CBullet::~CBullet()
+{
+
+}
+
+void CBullet::Animate(float fTimeElapsed)
+{
+	MoveByDir(m_fSpeed * fTimeElapsed);
+	Rotate(200.f * fTimeElapsed, 300.f * fTimeElapsed, 200.f * fTimeElapsed);
+	//UpdateBoundingBox();
+
+	// 플레이어에서 멀어지면 삭제
+	m_fCreateTime += fTimeElapsed;
+	//if (m_fCreateTime > 10.f)
+	//	return OBJ_DEAD;
+	//return OBJ_NONE;
 }

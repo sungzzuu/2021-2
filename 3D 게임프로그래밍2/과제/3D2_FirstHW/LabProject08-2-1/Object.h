@@ -137,6 +137,11 @@ protected:
 	ID3D12Resource					*m_pd3dcbGameObject = NULL;
 	CB_GAMEOBJECT_INFO				*m_pcbMappedGameObject = NULL;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+protected:
+	XMFLOAT3						m_xmf3MoveDir = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+
 public:
 	void SetMesh(int nIndex, CMesh *pMesh);
 	void SetShader(CShader *pShader);
@@ -171,6 +176,13 @@ public:
 
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void MoveByDir(float fDistance);
+	XMFLOAT3 GetDir();
+	void SetDir(XMFLOAT3 vDir) { m_xmf3MoveDir = vDir; }
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,4 +280,20 @@ public:
 	virtual ~CSkyBox();
 
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera = NULL);
+};
+
+/////////////////////////////////////////////////////////////////ADD////////////////////////////////////
+// Dir로 이동하는 총알
+class CBullet : public CGameObject
+{
+public:
+	CBullet(int nMeshes = 1);
+	virtual ~CBullet();
+	virtual void Animate(float fTimeElapsed);
+	void SetSpeed(float fSpeed) { m_fSpeed = fSpeed; }
+
+private:
+	float			m_fSpeed;
+	float			m_fCreateTime = 0.f;
+
 };

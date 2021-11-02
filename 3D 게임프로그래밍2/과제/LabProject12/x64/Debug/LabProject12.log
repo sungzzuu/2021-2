@@ -1,0 +1,22 @@
+﻿  Camera.cpp
+  GameFramework.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.h(100,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\GameFramework.cpp(528,71): warning C4244: '인수': 'WPARAM'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  GameObject.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.h(100,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LabProject12.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.h(100,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Mesh.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Mesh.cpp(687,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  Player.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.h(100,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Scene.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.h(100,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Shader.cpp
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.h(100,36): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.cpp(465,27): warning C4101: 'xmf3SurfaceNormal' :참조되지 않은 지역 변수입니다.
+D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\Shader.cpp(465,11): warning C4101: 'xmf3RotateAxis' :참조되지 않은 지역 변수입니다.
+  stdafx.cpp
+  Timer.cpp
+  코드를 생성하고 있습니다...
+  LabProject12.vcxproj -> D:\2021-2\3D 게임프로그래밍2\과제\LabProject12\x64\Debug\LabProject12.exe
