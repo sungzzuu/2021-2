@@ -438,6 +438,7 @@ void CObjectsShader::ReleaseObjects()
 
 void CObjectsShader::AnimateObjects(float fTimeElapsed)
 {
+
 	//for (int i = 0; i < OBJ_INDEX::END; ++i)
 	//{
 	//	for (auto& object : m_listAliveObject[i])
@@ -452,8 +453,6 @@ void CObjectsShader::AnimateObjects(float fTimeElapsed)
 			if (object->GetAlive())
 			{
 				object->Animate(fTimeElapsed);
-				if (!object->GetAlive())
-					m_iAlliveNum[i]--;
 			}
 
 		}
@@ -504,10 +503,12 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera 
 void CObjectsShader::AddAliveObject(OBJ_INDEX eIndex)
 {
 	//int index = m_listAliveObject[eIndex].size();
-
-	CGameObject* pObject = m_vecObjects[eIndex][m_iAlliveNum[eIndex]];
+	
+	CGameObject* pObject = m_vecObjects[eIndex][m_iAlliveNum[eIndex]++];
 	pObject->Awake(m_pPlayer->GetPosition(), m_pPlayer->GetLook());
-	m_iAlliveNum[eIndex]++;
+
+	if (m_iAlliveNum[eIndex] == MAXBULLETNUM)
+		m_iAlliveNum[eIndex] = 0;
 
 	//m_listAliveObject[eIndex].push_back(pObject);
 }

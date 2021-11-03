@@ -677,6 +677,7 @@ void CBullet::Animate(float fTimeElapsed)
 	m_fCreateTime += fTimeElapsed;
 	if (m_fCreateTime > 10.f)
 	{
+		m_fCreateTime = 0.f;
 		SetAlive(false);
 	}
 }

@@ -143,7 +143,7 @@ protected:
 	list<CGameObject*>				m_listAliveObject[OBJ_INDEX::END];
 
 	CPlayer* m_pPlayer = NULL;
-
+	float							m_fAttackCoolTime = 0.f;
 
 #ifdef _WITH_BATCH_MATERIAL
 	CMaterial						*m_pMaterial = NULL;
