@@ -35,7 +35,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrainWater->SetPosition(+(257 * xmf3Scale.x * 0.5f), 90.0f, +(257 * xmf3Scale.z * 0.5f));
 
 
-	m_nShaders = 1;
+	m_nShaders = 2;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	CObjectsShader *pObjectShader = new CObjectsShader();
@@ -43,6 +43,11 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
 
 	m_ppShaders[0] = pObjectShader;
+
+	//CBillboardObjectsShader* pObjectShader = new CBillboardObjectsShader();
+	//pObjectShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+	//pObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
+	//m_ppShaders[1] = pObjectShader;
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }

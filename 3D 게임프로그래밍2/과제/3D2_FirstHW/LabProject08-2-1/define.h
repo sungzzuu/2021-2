@@ -6,3 +6,7 @@
 enum OBJ_INDEX {
 	BULLET,END
 };
+
+enum SHADERS_INDEX {
+	OBJECTS, BILLBOARD, END
+};
