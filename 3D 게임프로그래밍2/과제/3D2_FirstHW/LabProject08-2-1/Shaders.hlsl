@@ -7,6 +7,8 @@ cbuffer cbCameraInfo : register(b1)
 {
 	matrix		gmtxView : packoffset(c0);
 	matrix		gmtxProjection : packoffset(c4);
+	float3		gvCameraPosition : packoffset(c8);
+
 };
 
 cbuffer cbGameObjectInfo : register(b2)
@@ -90,8 +92,13 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 	return(cColor);
 }
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+
+
+
 Texture2D<float4> gtxtTerrainBaseTexture : register(t1);
 Texture2D<float4> gtxtTerrainDetailTextures[3] : register(t2); //t2, t3, t4
 //Texture2D<float> gtxtTerrainAlphaTexture : register(t5);
@@ -251,3 +258,74 @@ float4 PSSkyBox(VS_TEXTURED_OUTPUT input) : SV_TARGET
 
 	return(cColor);
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+#define _WITH_BILLBOARD_ANIMATION
+
+struct VS_BILLBOARD_INSTANCING_INPUT
+{
+	float3 position : POSITION;
+	float2 uv : TEXCOORD;
+	float3 instancePosition : INSTANCEPOSITION;
+	float4 billboardInfo : BILLBOARDINFO; //(cx, cy, type, texture)
+};
+
+struct VS_BILLBOARD_INSTANCING_OUTPUT
+{
+	float4 position : SV_POSITION;
+	float2 uv : TEXCOORD;
+	int textureID : TEXTUREID;
+};
+
+#define _WITH_BILLBOARD_ANIMATION
+
+VS_BILLBOARD_INSTANCING_OUTPUT VSBillboardInstancing(VS_BILLBOARD_INSTANCING_INPUT input)
+{
+	VS_BILLBOARD_INSTANCING_OUTPUT output;
+
+	input.position.x *= (input.billboardInfo.x * 0.5f);
+	input.position.y *= (input.billboardInfo.y * 0.5f);
+
+	float3 f3Look = normalize(gvCameraPosition - input.instancePosition);
+	float3 f3Up = float3(0.0f, 1.0f, 0.0f);
+	float3 f3Right = normalize(cross(f3Up, f3Look));
+
+	matrix mtxWorld;
+	mtxWorld[0] = float4(f3Right, 0.0f);
+	mtxWorld[1] = float4(f3Up, 0.0f);
+	mtxWorld[2] = float4(f3Look, 0.0f);
+	mtxWorld[3] = float4(input.instancePosition, 1.0f);
+
+	output.position = mul(mul(mul(float4(input.position, 1.0f), mtxWorld), gmtxView), gmtxProjection);
+
+#ifdef _WITH_BILLBOARD_ANIMATION
+	if (input.uv.y < 0.7f)
+	{
+		float fShift = 0.0f;
+		uint nResidual = ((uint)gfCurrentTime % 4);
+		if (nResidual == 1) fShift = -gfElapsedTime * 10.5f;
+		if (nResidual == 3) fShift = +gfElapsedTime * 10.5f;
+		input.uv.x += fShift;
+	}
+#endif
+	output.uv = input.uv;
+
+	output.textureID = (int)input.billboardInfo.w - 1;
+
+	return(output);
+}
+
+Texture2D<float4> gtxtBillboardTextures[7] : register(t10);
+
+float4 PSBillboardInstancing(VS_BILLBOARD_INSTANCING_OUTPUT input) : SV_TARGET
+{
+	float4 cColor = gtxtBillboardTextures[NonUniformResourceIndex(input.textureID)].Sample(gSamplerState, input.uv);
+
+	return(cColor);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
