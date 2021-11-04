@@ -3,10 +3,15 @@
 #define MAXBULLETNUM 1000
 #define ATTACKCOOLTIME 0.3f
 
-enum OBJ_INDEX {
-	BULLET,END
-};
+namespace OBJ {
+	enum OBJ_INDEX {
+		BULLET, END
+	};
+}
 
-enum SHADERS_INDEX {
-	OBJECTS, BILLBOARD, END
-};
+
+namespace SHADER {
+	enum SHADERS_INDEX {
+		OBJECTS, BILLBOARD, END
+	};
+}

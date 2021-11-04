@@ -351,7 +351,7 @@ void CObjectsShader::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dComman
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
 	int cnt = 0;
-	for (int i = 0; i < OBJ_INDEX::END; i++)
+	for (int i = 0; i < OBJ::OBJ_INDEX::END; i++)
 	{
 		for (int j = 0; j < m_vecObjects[i].size(); j++)
 		{
@@ -415,13 +415,13 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 		pRotatingObject->SetMaterial(pCubeMaterial);
 #endif
 		pBullet->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
-		m_vecObjects[OBJ_INDEX::BULLET].push_back(pBullet);
+		m_vecObjects[OBJ::OBJ_INDEX::BULLET].push_back(pBullet);
 	}
 }
 
 void CObjectsShader::ReleaseObjects()
 {
-	for (int i = 0; i < OBJ_INDEX::END; ++i)
+	for (int i = 0; i < OBJ::OBJ_INDEX::END; ++i)
 	{
 		for (auto& object : m_vecObjects[i])
 		{
@@ -446,7 +446,7 @@ void CObjectsShader::AnimateObjects(float fTimeElapsed)
 	//		object->Animate(fTimeElapsed);
 	//	}
 	//}
-	for (int i = 0; i < OBJ_INDEX::END; ++i)
+	for (int i = 0; i < OBJ::OBJ_INDEX::END; ++i)
 	{
 		for (auto& object : m_vecObjects[i])
 		{
@@ -461,7 +461,7 @@ void CObjectsShader::AnimateObjects(float fTimeElapsed)
 
 void CObjectsShader::ReleaseUploadBuffers()
 {
-	for (int i = 0; i < OBJ_INDEX::END; ++i)
+	for (int i = 0; i < OBJ::OBJ_INDEX::END; ++i)
 	{
 		for (auto& object : m_vecObjects[i])
 		{
@@ -490,7 +490,7 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera 
 	//	}
 	//}
 
-	for (int i = 0; i < OBJ_INDEX::END; ++i)
+	for (int i = 0; i < OBJ::OBJ_INDEX::END; ++i)
 	{
 		for (auto& object : m_vecObjects[i])
 		{
@@ -500,7 +500,7 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera 
 	}
 }
 
-void CObjectsShader::AddAliveObject(OBJ_INDEX eIndex)
+void CObjectsShader::AddAliveObject(OBJ::OBJ_INDEX eIndex)
 {
 	//int index = m_listAliveObject[eIndex].size();
 	

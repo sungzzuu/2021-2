@@ -35,7 +35,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrainWater->SetPosition(+(257 * xmf3Scale.x * 0.5f), 90.0f, +(257 * xmf3Scale.z * 0.5f));
 
 
-	m_nShaders = 2;
+	m_nShaders = 1;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	CObjectsShader *pObjectShader = new CObjectsShader();
@@ -87,7 +87,7 @@ void CScene::AddBullet()
 {
 	// bullet을 넣는다. 리스트에. 상태를 변경한다. 총알만 있는 배열이 필요하다.
 	
-	dynamic_cast<CObjectsShader*>(m_ppShaders[0])->AddAliveObject(OBJ_INDEX::BULLET);
+	dynamic_cast<CObjectsShader*>(m_ppShaders[0])->AddAliveObject(OBJ::OBJ_INDEX::BULLET);
 }
 
 void CScene::SetPlayer(CPlayer* pPlayer)

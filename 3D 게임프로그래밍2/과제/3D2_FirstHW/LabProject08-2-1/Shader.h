@@ -129,18 +129,18 @@ public:
 
 
 public:
-	void AddAliveObject(OBJ_INDEX eIndex);
+	void AddAliveObject(OBJ::OBJ_INDEX eIndex);
 	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
 
 protected:
-	vector<CGameObject*>			m_vecObjects[OBJ_INDEX::END];
-	int								m_iAlliveNum[OBJ_INDEX::END];
+	vector<CGameObject*>			m_vecObjects[OBJ::OBJ_INDEX::END];
+	int								m_iAlliveNum[OBJ::OBJ_INDEX::END];
 
 	int								m_nObjects;
 	ID3D12Resource					*m_pd3dcbGameObjects = NULL;
 	CB_GAMEOBJECT_INFO				*m_pcbMappedGameObjects = NULL;
 
-	list<CGameObject*>				m_listAliveObject[OBJ_INDEX::END];
+	list<CGameObject*>				m_listAliveObject[OBJ::OBJ_INDEX::END];
 
 	CPlayer* m_pPlayer = NULL;
 	float							m_fAttackCoolTime = 0.f;

@@ -352,6 +352,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			break;
 		case VK_F10:
 			break;
+		case VK_CONTROL:
+			m_pScene->AddBullet();
+			break;
 		default:
 			break;
 		}
@@ -376,14 +379,8 @@ LRESULT CALLBACK CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMess
 	case WM_SIZE:
 		break;
 	case WM_LBUTTONDOWN:
-		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-
-		break;
 	case WM_RBUTTONDOWN:
 		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-
-		m_pScene->AddBullet();
-
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
