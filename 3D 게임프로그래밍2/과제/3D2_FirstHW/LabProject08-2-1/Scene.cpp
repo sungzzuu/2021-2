@@ -32,7 +32,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 
 	m_pTerrainWater = new CTerrainWater(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 257 * xmf3Scale.x, 257 * xmf3Scale.z);
-	m_pTerrainWater->SetPosition(+(257 * xmf3Scale.x * 0.5f), 90.0f, +(257 * xmf3Scale.z * 0.5f));
+	m_pTerrainWater->SetPosition(+(257 * xmf3Scale.x * 0.5f), 120.0f, +(257 * xmf3Scale.z * 0.5f));
 
 
 	m_nShaders = 2;
