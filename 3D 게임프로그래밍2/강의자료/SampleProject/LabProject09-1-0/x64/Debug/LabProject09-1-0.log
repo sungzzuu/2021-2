@@ -1,0 +1,4 @@
+﻿  Scene.cpp
+D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LabProject09-1-0.vcxproj -> D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject09-1-0(Terrain Tessellation).exe
