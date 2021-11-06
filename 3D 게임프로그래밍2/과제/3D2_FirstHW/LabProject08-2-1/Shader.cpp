@@ -381,15 +381,18 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 
 	// ÃÑ¾Ë »ý¼º ºÎºÐ
 	int ibulletNum = MAXBULLETNUM;
+	int iBuildingNum = BUILDINGNUM;
 	m_nObjects += ibulletNum;
+	m_nObjects += iBuildingNum;
+
 	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
 	pTexture->LoadTextureFromDDSFile(pd3dDevice, pd3dCommandList, L"Image/Stones.dds", RESOURCE_TEXTURE2D, 0);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, ibulletNum, 1);
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, m_nObjects, 1);
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	CreateConstantBufferViews(pd3dDevice, ibulletNum, m_pd3dcbGameObjects, ncbElementBytes);
+	CreateConstantBufferViews(pd3dDevice, m_nObjects, m_pd3dcbGameObjects, ncbElementBytes);
 	CreateShaderResourceViews(pd3dDevice, pTexture, 0, 3);
 
 #ifdef _WITH_BATCH_MATERIAL
@@ -400,23 +403,53 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 	pCubeMaterial->SetTexture(pTexture);
 #endif
 
-	CCubeMeshTextured *pCubeMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 3.0f, 3.0f, 3.0f);
+	int iCreateCnt = 0;
 
+	CCubeMeshTextured *pCubeMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 3.0f, 3.0f, 3.0f);
 	CBullet *pBullet = NULL;
 
 	for (int i = 0; i < ibulletNum; ++i)
 	{
 		pBullet = new CBullet(1);
-		float fx = pTerrain->GetWidth() * 0.5f;
-		float fz = pTerrain->GetLength() * 0.5f;
-		pBullet->SetPosition(fx, (pTerrain->GetHeight(fx, fz)), fz);
+		//float fx = pTerrain->GetWidth() * 0.5f;
+		//float fz = pTerrain->GetLength() * 0.5f;
+		//pBullet->SetPosition(fx, (pTerrain->GetHeight(fx, fz)), fz);
 		pBullet->SetMesh(0, pCubeMesh);
 #ifndef _WITH_BATCH_MATERIAL
-		pRotatingObject->SetMaterial(pCubeMaterial);
+		pBullet->SetMaterial(pCubeMaterial);
 #endif
-		pBullet->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
+		pBullet->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * iCreateCnt++));
 		m_vecObjects[OBJ::OBJ_INDEX::BULLET].push_back(pBullet);
 	}
+
+	CCubeMeshTextured* pBuildingMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 20.0f, 20.0f, 20.0f);
+	CGameObject* pBuilding = NULL;
+
+	// ºôµù »ý¼º
+	int iLineNum = iBuildingNum / 4;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < iLineNum; ++j)
+		{
+			pBuilding = new CGameObject(1);
+			float fx = pTerrain->GetWidth() * (0.4f + i*0.05f);
+			float fz = pTerrain->GetLength() * (0.04f*j);
+			pBuilding->SetPosition(fx, (pTerrain->GetHeight(fx, fz))+10.f, fz);
+			pBuilding->SetMesh(0, pBuildingMesh);
+			pBuilding->m_CollisionBox.Center = pBuilding->GetPosition();
+			pBuilding->m_CollisionBox.Extents =XMFLOAT3(20.0f, 20.0f, 20.0f);
+
+#ifndef _WITH_BATCH_MATERIAL
+			pBuilding->SetMaterial(pCubeMaterial);
+#endif
+			pBuilding->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * iCreateCnt++));
+			pBuilding->SetAlive(true);
+			m_vecObjects[OBJ::OBJ_INDEX::BUILDING].push_back(pBuilding);
+		}
+	
+	}
+
 }
 
 void CObjectsShader::ReleaseObjects()
@@ -457,6 +490,8 @@ void CObjectsShader::AnimateObjects(float fTimeElapsed)
 
 		}
 	}
+
+	Collision_Check();
 }
 
 void CObjectsShader::ReleaseUploadBuffers()
@@ -511,6 +546,26 @@ void CObjectsShader::AddAliveObject(OBJ::OBJ_INDEX eIndex)
 		m_iAlliveNum[eIndex] = 0;
 
 	//m_listAliveObject[eIndex].push_back(pObject);
+}
+
+void CObjectsShader::Collision_Check()
+{
+	// ÃÑ¾Ë°ú ºôµù
+	for (auto& bullet : m_vecObjects[OBJ::BULLET])
+	{
+		if (bullet->GetAlive())
+		{
+			for (auto& building : m_vecObjects[OBJ::BUILDING])
+			{
+				if (bullet->m_CollisionBox.Intersects(building->m_CollisionBox))
+				{
+					// Ãæµ¹ÀÌÆåÆ® »ý¼º ¹× »èÁ¦
+					bullet->SetAlive(false);
+					building->SetAlive(false);
+				}
+			}
+		}
+	}
 }
 
 

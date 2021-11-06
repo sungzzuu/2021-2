@@ -143,6 +143,10 @@ protected:
 	bool							m_bAlive = false;	// Render 여부 결정
 
 public:
+	BoundingOrientedBox				m_CollisionBox;
+	void							UpdateBoundingBox();
+
+public:
 	void SetMesh(int nIndex, CMesh *pMesh);
 	void SetShader(CShader *pShader);
 	void SetMaterial(CMaterial *pMaterial);

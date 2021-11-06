@@ -104,6 +104,8 @@ protected:
 	int								m_nBaseVertex = 0;
 
 public:
+	BoundingOrientedBox				m_xmCollisionBox;
+public:
 public:
 	D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView() { return(m_d3dVertexBufferView); }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);

@@ -131,6 +131,7 @@ public:
 public:
 	void AddAliveObject(OBJ::OBJ_INDEX eIndex);
 	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
+	void Collision_Check();
 
 protected:
 	vector<CGameObject*>			m_vecObjects[OBJ::OBJ_INDEX::END];

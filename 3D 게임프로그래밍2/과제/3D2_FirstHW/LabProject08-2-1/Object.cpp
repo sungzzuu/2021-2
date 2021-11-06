@@ -238,6 +238,15 @@ CGameObject::~CGameObject()
 	if (m_pMaterial) m_pMaterial->Release();
 }
 
+void CGameObject::UpdateBoundingBox()
+{
+	if (m_ppMeshes[0])
+	{
+		//m_ppMeshes[0]->.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+		//XMStoreFloat4(&m_CollisionBox.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_CollisionBox.Orientation)));
+	}
+}
+
 void CGameObject::SetMesh(int nIndex, CMesh *pMesh)
 {
 	if (m_ppMeshes)
@@ -290,6 +299,7 @@ void CGameObject::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandLi
 
 void CGameObject::Animate(float fTimeElapsed)
 {
+	//UpdateBoundingBox();
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
@@ -376,7 +386,7 @@ XMFLOAT3 CGameObject::GetDir()
 
 void CGameObject::Awake(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Dir)
 {
-	SetPosition(xmf3Position);
+	SetPosition(XMFLOAT3(xmf3Position.x, xmf3Position.y + 5.f, xmf3Position.z));
 	SetDir(xmf3Dir);
 	SetAlive(true);
 }
@@ -660,6 +670,9 @@ CBullet::CBullet(int nMeshes)
 {
 	m_fSpeed = 20.f;
 	m_fCreateTime = 0.f;
+	m_CollisionBox.Center = GetPosition();
+	m_CollisionBox.Extents = XMFLOAT3(1.5f,1.5f,1.5f);
+	
 }
 
 CBullet::~CBullet()
@@ -671,6 +684,7 @@ void CBullet::Animate(float fTimeElapsed)
 {
 	MoveByDir(m_fSpeed * fTimeElapsed);
 	Rotate(200.f * fTimeElapsed, 300.f * fTimeElapsed, 200.f * fTimeElapsed);
+	m_CollisionBox.Center = GetPosition();
 	//UpdateBoundingBox();
 
 	// 플레이어에서 멀어지면 렌더 안하기
