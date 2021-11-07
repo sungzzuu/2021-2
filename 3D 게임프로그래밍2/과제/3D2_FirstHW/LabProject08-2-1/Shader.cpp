@@ -357,6 +357,11 @@ void CObjectsShader::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dComman
 		{
 			CB_GAMEOBJECT_INFO* pbMappedcbGameObject = (CB_GAMEOBJECT_INFO*)((UINT8*)m_pcbMappedGameObjects + (cnt * ncbElementBytes));
 			XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&(m_vecObjects[i][j]->m_xmf4x4World))));
+			if (m_vecObjects[i][j]->m_pMaterial && m_vecObjects[i][j]->m_pMaterial->m_pTexture)
+			{
+				XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4Texture, XMMatrixTranspose(XMLoadFloat4x4(&(m_vecObjects[i][j]->m_pMaterial->m_pTexture->m_xmf4x4Texture))));
+			}
+
 			cnt++;
 		}
 		
@@ -662,7 +667,7 @@ void CMultiSpriteObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12Gra
 		pSpriteObject->SetMaterial(ppSpriteMaterials[j]);
 		pSpriteObject->SetPosition(XMFLOAT3(xmf3Position.x, xmf3Position.y, xmf3Position.z));
 		pSpriteObject->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * j));
-
+		pSpriteObject->SetAlive(true);
 		pSpriteObject->m_fSpeed = 3.0f / (ppSpriteTextures[j]->m_nRows * ppSpriteTextures[j]->m_nCols);
 		m_vecObjects[OBJ::BULLET].push_back(pSpriteObject);
 	}
@@ -681,7 +686,7 @@ void CMultiSpriteObjectsShader::ReleaseObjects()
 void CMultiSpriteObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
 	// ·»´õÁ¶°Ç
-	/*if (1)
+	if (1)
 	{
 		XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
 		CPlayer* pPlayer = pCamera->GetPlayer();
@@ -691,15 +696,15 @@ void CMultiSpriteObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandLis
 		XMFLOAT3 xmf3Position = Vector3::Add(xmf3PlayerPosition, Vector3::ScalarProduct(xmf3PlayerLook, 50.0f, false));
 		for (int j = 0; j < m_nObjects; j++)
 		{
-			if (m_ppObjects[j])
+			if (!m_vecObjects[OBJ::BULLET].empty())
 			{
-				m_ppObjects[j]->SetPosition(xmf3Position);
-				m_ppObjects[j]->SetLookAt(xmf3CameraPosition, XMFLOAT3(0.0f, 1.0f, 0.0f));
+				m_vecObjects[OBJ::BULLET][j]->SetPosition(xmf3Position);
+				m_vecObjects[OBJ::BULLET][j]->SetLookAt(xmf3CameraPosition, XMFLOAT3(0.0f, 1.0f, 0.0f));
 			}
 		}
 
 		CObjectsShader::Render(pd3dCommandList, pCamera);
-	}*/
+	}
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

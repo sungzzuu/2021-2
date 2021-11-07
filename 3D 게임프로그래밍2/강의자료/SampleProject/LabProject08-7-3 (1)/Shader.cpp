@@ -762,7 +762,7 @@ void CMultiSpriteObjectsShader::ReleaseObjects()
 
 void CMultiSpriteObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
 {
-	if (m_bActive)
+	if (1)
 	{
 		XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
 		CPlayer *pPlayer = pCamera->GetPlayer();

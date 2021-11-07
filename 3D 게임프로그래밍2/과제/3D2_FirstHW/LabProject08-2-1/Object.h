@@ -22,11 +22,23 @@
 
 class CShader;
 
+struct MATERIAL
+{
+	XMFLOAT4						m_xmf4Ambient;
+	XMFLOAT4						m_xmf4Diffuse;
+	XMFLOAT4						m_xmf4Specular; //(r,g,b,a=power)
+	XMFLOAT4						m_xmf4Emissive;
+};
+
 struct CB_GAMEOBJECT_INFO
 {
 	XMFLOAT4X4						m_xmf4x4World;
-};
+	MATERIAL						m_material;
 
+	XMFLOAT4X4						m_xmf4x4Texture;
+	XMINT2							m_xmi2TextureTiling;
+	XMFLOAT2						m_xmf2TextureOffset;
+};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CTexture
@@ -193,6 +205,7 @@ public:
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);
 
+	void SetLookAt(XMFLOAT3& xmf3Target, XMFLOAT3& xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void MoveByDir(float fDistance);

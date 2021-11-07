@@ -11,9 +11,23 @@ cbuffer cbCameraInfo : register(b1)
 
 };
 
+struct MATERIAL
+{
+	float4				m_cAmbient;
+	float4				m_cDiffuse;
+	float4				m_cSpecular; //a = power
+	float4				m_cEmissive;
+
+	matrix				gmtxTexture;
+	int2				gi2TextureTiling;
+	float2				gf2TextureOffset;
+};
+
 cbuffer cbGameObjectInfo : register(b2)
 {
 	matrix		gmtxGameObject : packoffset(c0);
+	MATERIAL	gMaterial : packoffset(c4);
+
 };
 
 cbuffer cbFrameworkInfo : register(b3)
@@ -81,6 +95,16 @@ VS_TEXTURED_OUTPUT VSTextured(VS_TEXTURED_INPUT input)
 
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
 	output.uv = input.uv;
+
+	return(output);
+}
+
+VS_TEXTURED_OUTPUT VSSpriteAnimation(VS_TEXTURED_INPUT input)
+{
+	VS_TEXTURED_OUTPUT output;
+
+	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+	output.uv = mul(float3(input.uv, 1.0f), (float3x3)(gMaterial.gmtxTexture)).xy;
 
 	return(output);
 }

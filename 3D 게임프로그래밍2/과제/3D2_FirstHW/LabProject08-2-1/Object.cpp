@@ -337,6 +337,8 @@ void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pC
 		if (m_pMaterial->m_pTexture)
 		{
 			m_pMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
+			if (m_pcbMappedGameObject) XMStoreFloat4x4(&m_pcbMappedGameObject->m_xmf4x4Texture, XMMatrixTranspose(XMLoadFloat4x4(&m_pMaterial->m_pTexture->m_xmf4x4Texture)));
+
 		}
 	}
 
@@ -443,6 +445,7 @@ void CGameObject::Rotate(XMFLOAT3 *pxmf3Axis, float fAngle)
 	XMMATRIX mtxRotate = XMMatrixRotationAxis(XMLoadFloat3(pxmf3Axis), XMConvertToRadians(fAngle));
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
 }
+
 void CGameObject::MoveByDir(float fDistance)
 {
 	XMFLOAT3 xmf3Position = GetPosition();
@@ -450,6 +453,23 @@ void CGameObject::MoveByDir(float fDistance)
 
 	xmf3Position = Vector3::Add(xmf3Position, xmf3Dir, fDistance);
 	CGameObject::SetPosition(xmf3Position);
+}
+
+void CGameObject::SetLookAt(XMFLOAT3& xmf3Target, XMFLOAT3& xmf3Up)
+{
+	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(xmf3Position, xmf3Target, xmf3Up);
+	m_xmf4x4World._11 = mtxLookAt._11; m_xmf4x4World._12 = mtxLookAt._21; m_xmf4x4World._13 = mtxLookAt._31;
+	m_xmf4x4World._21 = mtxLookAt._12; m_xmf4x4World._22 = mtxLookAt._22; m_xmf4x4World._23 = mtxLookAt._32;
+	m_xmf4x4World._31 = mtxLookAt._13; m_xmf4x4World._32 = mtxLookAt._23; m_xmf4x4World._33 = mtxLookAt._33;
+	/*
+		XMFLOAT3 xmf3Look = Vector3::Normalize(Vector3::Subtract(xmf3Target, xmf3Position));
+		XMFLOAT3 xmf3Right = Vector3::CrossProduct(xmf3Up, xmf3Look, true);
+		xmf3Up = Vector3::CrossProduct(xmf3Look, xmf3Right, true);
+		m_xmf4x4World._11 = xmf3Right.x; m_xmf4x4World._12 = xmf3Right.y; m_xmf4x4World._13 = xmf3Right.z;
+		m_xmf4x4World._21 = xmf3Up.x; m_xmf4x4World._22 = xmf3Up.y; m_xmf4x4World._23 = xmf3Up.z;
+		m_xmf4x4World._31 = xmf3Look.x; m_xmf4x4World._32 = xmf3Look.y; m_xmf4x4World._33 = xmf3Look.z;
+		*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -35,7 +35,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrainWater->SetPosition(+(257 * xmf3Scale.x * 0.5f), 120.0f, +(257 * xmf3Scale.z * 0.5f));
 
 
-	m_nShaders = 2;
+	m_nShaders = 3;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	CObjectsShader *pObjectShader = new CObjectsShader();
@@ -53,7 +53,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pMultiSpriteObjectShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
 	pMultiSpriteObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
 	//pMultiSpriteObjectShader->SetActive(false);
-	m_ppShaders[1] = pMultiSpriteObjectShader;
+	m_ppShaders[2] = pMultiSpriteObjectShader;
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
@@ -144,6 +144,11 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dDescriptorRanges[5].RegisterSpace = 0;
 	pd3dDescriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	//pd3dDescriptorRanges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[6].NumDescriptors = 1;
+	//pd3dDescriptorRanges[6].BaseShaderRegister = 11; //t11: gtxtTerrainAlphaTexture
+	//pd3dDescriptorRanges[6].RegisterSpace = 0;
+	//pd3dDescriptorRanges[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	D3D12_ROOT_PARAMETER pd3dRootParameters[10];
 
@@ -198,6 +203,11 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[9].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[9].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[5]; //t10: gtxtBillboardTextures[7]
 	pd3dRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	//pd3dRootParameters[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[10].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[10].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[6];
+	//pd3dRootParameters[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
 
