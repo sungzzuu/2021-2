@@ -2,6 +2,7 @@
 
 #define MAXBULLETNUM 1000
 #define BUILDINGNUM 100
+#define EXPLOSION_NUM 50
 #define ATTACKCOOLTIME 0.3f
 
 namespace OBJ {

@@ -108,7 +108,7 @@ public:
 
 
 	void Animate() { }
-	void AnimateRowColumn(float fTime = 0.0f);
+	bool AnimateRowColumn(float fTime = 0.0f);
 };
 
 class CMaterial

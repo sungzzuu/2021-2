@@ -169,7 +169,7 @@ D3D12_SHADER_RESOURCE_VIEW_DESC CTexture::GetShaderResourceViewDesc(int nIndex)
 	}
 	return(d3dShaderResourceViewDesc);
 }
-void CTexture::AnimateRowColumn(float fTime)
+bool CTexture::AnimateRowColumn(float fTime)
 {
 	//	m_xmf4x4Texture = Matrix4x4::Identity();
 	m_xmf4x4Texture._11 = 1.0f / float(m_nRows);
@@ -178,9 +178,17 @@ void CTexture::AnimateRowColumn(float fTime)
 	m_xmf4x4Texture._32 = float(m_nCol) / float(m_nCols);
 	if (fTime == 0.0f)
 	{
-		if (++m_nCol == m_nCols) { m_nRow++; m_nCol = 0; }
-		if (m_nRow == m_nRows) m_nRow = 0;
+		if (++m_nCol == m_nCols) { 
+			m_nRow++; m_nCol = 0;
+			return true;
+		}
+		if (m_nRow == m_nRows) 
+		{
+			m_nRow = 0;
+			return true;
+		}
 	}
+	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -743,10 +751,16 @@ CMultiSpriteObject::~CMultiSpriteObject()
 
 void CMultiSpriteObject::Animate(float fTimeElapsed)
 {
+	if (!GetAlive())
+		return;
+
 	if (m_pMaterial && m_pMaterial->m_pTexture)
 	{
 		m_fTime += fTimeElapsed * 0.5f;
-		if (m_fTime >= m_fSpeed) m_fTime = 0.0f;
-		m_pMaterial->m_pTexture->AnimateRowColumn(m_fTime);
+		if (m_fTime >= m_fSpeed) 
+			m_fTime = 0.0f;
+		bool bEnd = m_pMaterial->m_pTexture->AnimateRowColumn(m_fTime);
+		if (bEnd)
+			SetAlive(false);
 	}
 }

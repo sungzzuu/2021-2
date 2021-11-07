@@ -55,6 +55,8 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	//pMultiSpriteObjectShader->SetActive(false);
 	m_ppShaders[2] = pMultiSpriteObjectShader;
 
+	pObjectShader->m_pMultipleSpriteShader = pMultiSpriteObjectShader;
+
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
 

@@ -7,6 +7,8 @@
 #include "Object.h"
 #include "Camera.h"
 
+class CMultiSpriteObjectsShader;
+
 class CShader
 {
 public:
@@ -149,6 +151,10 @@ protected:
 #ifdef _WITH_BATCH_MATERIAL
 	CMaterial						*m_pMaterial = NULL;
 #endif
+
+public:
+	CMultiSpriteObjectsShader		*m_pMultipleSpriteShader;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,6 +221,9 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera);
 
 	virtual void ReleaseUploadBuffers();
+
+public:
+	void AddExplosion(XMFLOAT3 xmf3Position);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

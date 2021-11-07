@@ -562,12 +562,17 @@ void CObjectsShader::Collision_Check()
 		{
 			for (auto& building : m_vecObjects[OBJ::BUILDING])
 			{
-				if (bullet->m_CollisionBox.Intersects(building->m_CollisionBox))
+				if (building->GetAlive())
 				{
-					// 충돌이펙트 생성 및 삭제
-					bullet->SetAlive(false);
-					building->SetAlive(false);
+					if (bullet->m_CollisionBox.Intersects(building->m_CollisionBox))
+					{
+						// 충돌이펙트 생성 및 삭제
+						bullet->SetAlive(false);
+						building->SetAlive(false);
+						m_pMultipleSpriteShader->AddExplosion(bullet->GetPosition());
+					}
 				}
+				
 			}
 		}
 	}
@@ -646,7 +651,7 @@ void CMultiSpriteObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12Gra
 
 	CTexturedRectMesh* pSpriteMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-	m_nObjects = 2;
+	m_nObjects = EXPLOSION_NUM;
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -657,18 +662,26 @@ void CMultiSpriteObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12Gra
 	CreateShaderResourceViews(pd3dDevice, ppSpriteTextures[1], 0, 3);
 
 
-	XMFLOAT3 xmf3Position = XMFLOAT3(1030.0f, 180.0f, 1410.0f);
+	//XMFLOAT3 xmf3Position = XMFLOAT3(1030.0f, 180.0f, 1410.0f);
 	CMultiSpriteObject* pSpriteObject = NULL;
+
+	CHeightMapTerrain* pTerrain = (CHeightMapTerrain*)pContext;
+	
+	float fx = pTerrain->GetWidth() * 0.5f;
+	float fz = pTerrain->GetLength() * 0.5f;
+	float fy = pTerrain->GetHeight(fx, fz);
+
 	for (int j = 0; j < m_nObjects; j++)
 	{
 		pSpriteObject = new CMultiSpriteObject();
 
 		pSpriteObject->SetMesh(0, pSpriteMesh);
-		pSpriteObject->SetMaterial(ppSpriteMaterials[j]);
-		pSpriteObject->SetPosition(XMFLOAT3(xmf3Position.x, xmf3Position.y, xmf3Position.z));
+		pSpriteObject->SetMaterial(ppSpriteMaterials[j%2]);
+		pSpriteObject->SetPosition(XMFLOAT3(fx, fy, fz));
+
 		pSpriteObject->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * j));
-		pSpriteObject->SetAlive(true);
-		pSpriteObject->m_fSpeed = 3.0f / (ppSpriteTextures[j]->m_nRows * ppSpriteTextures[j]->m_nCols);
+		pSpriteObject->SetAlive(false);
+		pSpriteObject->m_fSpeed = 3.0f / (ppSpriteTextures[j % 2]->m_nRows * ppSpriteTextures[j % 2]->m_nCols);
 		m_vecObjects[OBJ::BULLET].push_back(pSpriteObject);
 	}
 }
@@ -676,6 +689,21 @@ void CMultiSpriteObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12Gra
 void CMultiSpriteObjectsShader::ReleaseUploadBuffers()
 {
 	CObjectsShader::ReleaseUploadBuffers();
+}
+
+void CMultiSpriteObjectsShader::AddExplosion(XMFLOAT3 xmf3Position)
+{
+	//int index = m_listAliveObject[eIndex].size();
+
+	CGameObject* pObject = m_vecObjects[OBJ::BULLET][m_iAlliveNum[OBJ::BULLET]++];
+	pObject->Awake(xmf3Position, xmf3Position);
+	pObject = m_vecObjects[OBJ::BULLET][m_iAlliveNum[OBJ::BULLET]++];
+	pObject->Awake(xmf3Position, xmf3Position);
+
+	if (m_iAlliveNum[OBJ::BULLET] == EXPLOSION_NUM)
+		m_iAlliveNum[OBJ::BULLET] = 0;
+
+	//m_listAliveObject[eIndex].push_back(pObject);
 }
 
 void CMultiSpriteObjectsShader::ReleaseObjects()
@@ -689,16 +717,16 @@ void CMultiSpriteObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandLis
 	if (1)
 	{
 		XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
-		CPlayer* pPlayer = pCamera->GetPlayer();
-		XMFLOAT3 xmf3PlayerPosition = pPlayer->GetPosition();
-		XMFLOAT3 xmf3PlayerLook = pPlayer->GetLookVector();
-		xmf3PlayerPosition.y += 5.0f;
-		XMFLOAT3 xmf3Position = Vector3::Add(xmf3PlayerPosition, Vector3::ScalarProduct(xmf3PlayerLook, 50.0f, false));
+		//CPlayer* pPlayer = pCamera->GetPlayer();
+		//XMFLOAT3 xmf3PlayerPosition = pPlayer->GetPosition();
+		//XMFLOAT3 xmf3PlayerLook = pPlayer->GetLookVector();
+		//xmf3PlayerPosition.y += 5.0f;
+		//XMFLOAT3 xmf3Position = Vector3::Add(xmf3PlayerPosition, Vector3::ScalarProduct(xmf3PlayerLook, 50.0f, false));
 		for (int j = 0; j < m_nObjects; j++)
 		{
 			if (!m_vecObjects[OBJ::BULLET].empty())
 			{
-				m_vecObjects[OBJ::BULLET][j]->SetPosition(xmf3Position);
+				//m_vecObjects[OBJ::BULLET][j]->SetPosition(xmf3Position);
 				m_vecObjects[OBJ::BULLET][j]->SetLookAt(xmf3CameraPosition, XMFLOAT3(0.0f, 1.0f, 0.0f));
 			}
 		}
