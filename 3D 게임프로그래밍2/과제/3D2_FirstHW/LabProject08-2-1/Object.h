@@ -32,7 +32,7 @@ struct CB_GAMEOBJECT_INFO
 class CTexture
 {
 public:
-	CTexture(int nTextureResources, UINT nResourceType, int nSamplers, int nRootParameters);
+	CTexture(int nTextureResources, UINT nResourceType, int nSamplers, int nRootParameters, int nRows = 1, int nCols = 1);
 	virtual ~CTexture();
 
 private:
@@ -55,7 +55,15 @@ private:
 
 	int								m_nSamplers = 0;
 	D3D12_GPU_DESCRIPTOR_HANDLE*	m_pd3dSamplerGpuDescriptorHandles = NULL;
+/////////////////////// ¿Ã∆Â∆Æ ///////////////////////////	
+	int 							m_nRow = 0;
+	int 							m_nCol = 0;
 
+public:
+	int 							m_nRows = 1;
+	int 							m_nCols = 1;
+
+	XMFLOAT4X4						m_xmf4x4Texture;
 public:
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
@@ -85,6 +93,10 @@ public:
 	D3D12_SHADER_RESOURCE_VIEW_DESC GetShaderResourceViewDesc(int nIndex);
 
 	void ReleaseUploadBuffers();
+
+
+	void Animate() { }
+	void AnimateRowColumn(float fTime = 0.0f);
 };
 
 class CMaterial
@@ -303,4 +315,18 @@ private:
 	float			m_fSpeed;
 	float			m_fCreateTime = 0.f;
 
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CMultiSpriteObject : public CGameObject
+{
+public:
+	CMultiSpriteObject();
+	virtual ~CMultiSpriteObject();
+
+	float m_fSpeed = 0.1f;
+	float m_fTime = 0.0f;
+
+	virtual void Animate(float fTimeElapsed);
 };

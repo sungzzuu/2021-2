@@ -49,6 +49,12 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pBillBoardObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
 	m_ppShaders[1] = pBillBoardObjectShader;
 
+	CMultiSpriteObjectsShader* pMultiSpriteObjectShader = new CMultiSpriteObjectsShader();
+	pMultiSpriteObjectShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+	pMultiSpriteObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
+	//pMultiSpriteObjectShader->SetActive(false);
+	m_ppShaders[1] = pMultiSpriteObjectShader;
+
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
 
