@@ -1,5 +1,0 @@
-﻿  WinApp.cpp
-D:\2021-2\네트워크 게임 프로그래밍\homework\9.GUI\WinApp\WinApp\WinApp.cpp(39,53): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\2021-2\네트워크 게임 프로그래밍\homework\9.GUI\WinApp\WinApp\WinApp.cpp(165,6): warning C4101: 'hdc' :참조되지 않은 지역 변수입니다.
-D:\2021-2\네트워크 게임 프로그래밍\homework\9.GUI\WinApp\WinApp\WinApp.cpp(166,14): warning C4101: 'ps' :참조되지 않은 지역 변수입니다.
-  WinApp.vcxproj -> D:\2021-2\네트워크 게임 프로그래밍\homework\9.GUI\WinApp\Debug\WinApp.exe
