@@ -4,15 +4,14 @@
 #include <winsock2.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <commctrl.h>
-
 
 #define SERVERPORT 9000
 #define BUFSIZE    512
 
 // 윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
+// 편집 컨트롤 출력 함수
+void DisplayText(char *fmt, ...);
 // 오류 출력 함수
 void err_quit(char *msg);
 void err_display(char *msg);
@@ -23,8 +22,6 @@ DWORD WINAPI ProcessClient(LPVOID arg);
 HINSTANCE hInst; // 인스턴스 핸들
 HWND hEdit; // 편집 컨트롤
 CRITICAL_SECTION cs; // 임계 영역
-HWND hProgress;
-int percent;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow)
@@ -71,13 +68,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
     case WM_CREATE:
-        //프로그레스바 생성
-        hProgress = CreateWindow(PROGRESS_CLASS, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-            10, 10, 400, 30, hWnd, NULL, hInst, NULL);
-
-        SendMessage(hProgress, PBM_SETRANGE, 0, MAKELPARAM(0, 100));//프로그레스 초기화
-        SendMessage(hProgress, PBM_SETPOS, 20, 0);//프로그레스 초기값
-
+        hEdit = CreateWindow("edit", NULL,
+            WS_CHILD | WS_VISIBLE | WS_HSCROLL |
+            WS_VSCROLL | ES_AUTOHSCROLL |
+            ES_AUTOVSCROLL | ES_MULTILINE | ES_READONLY,
+            0, 0, 0, 0, hWnd, (HMENU)100, hInst, NULL);
         return 0;
     case WM_SIZE:
         MoveWindow(hEdit, 0, 0, LOWORD(lParam), HIWORD(lParam), TRUE);
@@ -92,6 +87,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
+// 편집 컨트롤 출력 함수
+void DisplayText(char *fmt, ...)
+{
+    va_list arg;
+    va_start(arg, fmt);
+
+    char cbuf[BUFSIZE + 256];
+    vsprintf(cbuf, fmt, arg);
+
+    EnterCriticalSection(&cs);
+    int nLength = GetWindowTextLength(hEdit);
+    SendMessage(hEdit, EM_SETSEL, nLength, nLength);
+    SendMessage(hEdit, EM_REPLACESEL, FALSE, (LPARAM)cbuf);
+    LeaveCriticalSection(&cs);
+
+    va_end(arg);
+}
 
 // 소켓 함수 오류 출력 후 종료
 void err_quit(char *msg)
@@ -116,6 +128,7 @@ void err_display(char *msg)
         NULL, WSAGetLastError(),
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (LPTSTR)&lpMsgBuf, 0, NULL);
+    DisplayText("[%s] %s", msg, (char *)lpMsgBuf);
     LocalFree(lpMsgBuf);
 }
 
@@ -161,6 +174,10 @@ DWORD WINAPI ServerMain(LPVOID arg)
             break;
         }
 
+        // 접속한 클라이언트 정보 출력
+        DisplayText("\r\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\r\n",
+            inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+
         // 스레드 생성
         hThread = CreateThread(NULL, 0, ProcessClient,
             (LPVOID)client_sock, 0, NULL);
@@ -199,6 +216,10 @@ DWORD WINAPI ProcessClient(LPVOID arg)
         else if (retval == 0)
             break;
 
+        // 받은 데이터 출력
+        buf[retval] = '\0';
+        DisplayText("[TCP/%s:%d] %s\r\n", inet_ntoa(clientaddr.sin_addr),
+            ntohs(clientaddr.sin_port), buf);
 
         // 데이터 보내기
         retval = send(client_sock, buf, retval, 0);
@@ -210,8 +231,8 @@ DWORD WINAPI ProcessClient(LPVOID arg)
 
     // closesocket()
     closesocket(client_sock);
-    //DisplayText("[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d\r\n",
-    //    inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+    DisplayText("[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d\r\n",
+        inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
     return 0;
 }
