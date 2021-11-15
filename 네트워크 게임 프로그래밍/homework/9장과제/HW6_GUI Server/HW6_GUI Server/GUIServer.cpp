@@ -8,7 +8,7 @@
 #include <fstream>
 
 
-#define SERVERPORT 9000
+#define SERVERPORT 2701
 #define BUFSIZE    512
 
 // 윈도우 프로시저

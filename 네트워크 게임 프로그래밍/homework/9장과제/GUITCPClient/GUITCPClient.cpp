@@ -7,8 +7,8 @@
 #include <fstream>
 #include "resource.h"
 
-#define SERVERIP   "127.0.0.1"
-#define SERVERPORT 9000
+#define SERVERIP   "172.30.1.31"
+#define SERVERPORT 8080
 #define BUFSIZE 512
 
 // 대화상자 프로시저
