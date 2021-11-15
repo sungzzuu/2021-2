@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #define SERVERIP   "127.0.0.1"
-#define SERVERPORT 9900
+#define SERVERPORT 9000
 #define BUFSIZE    512
 
 // 소켓 함수 오류 출력 후 종료

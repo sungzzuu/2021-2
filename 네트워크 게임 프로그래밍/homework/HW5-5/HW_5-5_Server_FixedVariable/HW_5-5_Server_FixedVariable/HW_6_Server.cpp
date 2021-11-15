@@ -55,7 +55,9 @@ int recvn(SOCKET s, char* buf, int len, int flags)
     return (len - left);
 }
 
-void ProcessClient(LPVOID arg)
+
+// 클라이언트와 데이터 통신
+DWORD WINAPI ClientProcess(LPVOID arg)
 {
     SOCKET client_sock = (SOCKET)arg;
     int retval;
@@ -155,12 +157,6 @@ void ProcessClient(LPVOID arg)
     delete[] fileNameBuf;
     closesocket(client_sock);
 
-}
-// 클라이언트와 데이터 통신
-DWORD WINAPI MyThread1(LPVOID arg)
-{
-    ProcessClient(arg);
-
     return 0;
 }
 
@@ -202,7 +198,7 @@ int main(int argc, char* argv[])
             break;
         }
 
-        hThread = CreateThread(NULL, 0, MyThread1,
+        hThread = CreateThread(NULL, 0, ClientProcess,
             (LPVOID)client_sock, 0, NULL);
 
         if (cnt == 2)

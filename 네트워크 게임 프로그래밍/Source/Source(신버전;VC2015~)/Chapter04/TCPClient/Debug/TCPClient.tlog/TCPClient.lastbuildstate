@@ -1,2 +1,2 @@
-PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30037:TargetPlatformVersion=10.0.19041.0:
-Debug|Win32|C:\Users\윤성주\Desktop\2021-2\네트워크 게임 프로그래밍\Source\Source(신버전;VC2015~)\Chapter04\TCPClient\|
+PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30133:VCServicingVersionATL=14.29.30136:VCServicingVersionCrtHeaders=14.29.30136:VCServicingVersionCompilers=14.29.30136:TargetPlatformVersion=10.0.19041.0:
+Debug|Win32|D:\2021-2\네트워크 게임 프로그래밍\Source\Source(신버전;VC2015~)\Chapter04\TCPClient\|
