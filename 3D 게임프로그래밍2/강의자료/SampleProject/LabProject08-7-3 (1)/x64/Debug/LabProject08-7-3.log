@@ -1,2 +1,14 @@
-﻿  Shader.cpp
-  LabProject08-7-3.vcxproj -> D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject08-7-3.exe
+﻿  stdafx.cpp
+  Camera.cpp
+  DDSTextureLoader12.cpp
+  GameFramework.cpp
+  LabProject08-7-3.cpp
+  Mesh.cpp
+  Object.cpp
+  Player.cpp
+  Scene.cpp
+  Shader.cpp
+  Timer.cpp
+  코드를 생성하고 있습니다...
+  LINK : C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject08-7-3.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  LabProject08-7-3.vcxproj -> C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject08-7-3.exe

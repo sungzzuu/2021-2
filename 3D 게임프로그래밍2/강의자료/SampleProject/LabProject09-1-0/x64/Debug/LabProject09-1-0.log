@@ -1,4 +1,30 @@
-﻿  Scene.cpp
-D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  LabProject09-1-0.vcxproj -> D:\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject09-1-0(Terrain Tessellation).exe
+﻿  compilation object save succeeded; see C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\Shaders.cso
+  Camera.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  DDSTextureLoader12.cpp
+  GameFramework.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LabProject09-1-0.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Mesh.cpp
+  Object.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Player.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Scene.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Shader.cpp
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(257,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\LabProject09-1-0\Object.h(258,37): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  stdafx.cpp
+  Timer.cpp
+  UILayer.cpp
+  코드를 생성하고 있습니다...
+  LINK : C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject09-1-0(Terrain Tessellation).exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  LabProject09-1-0.vcxproj -> C:\Users\ysj\Desktop\2021-2\2021-2\3D 게임프로그래밍2\강의자료\SampleProject\x64\Debug\LabProject09-1-0(Terrain Tessellation).exe
