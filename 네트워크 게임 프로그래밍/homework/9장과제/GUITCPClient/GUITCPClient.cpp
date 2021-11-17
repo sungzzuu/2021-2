@@ -72,7 +72,7 @@ BOOL CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case IDOK:
             EnableWindow(hSendButton, FALSE); // 보내기 버튼 비활성화
             WaitForSingleObject(hReadEvent, INFINITE); // 읽기 완료 기다리기
-            GetDlgItemText(hDlg, IDC_EDIT1, filename_buf, BUFSIZE + 1);
+            GetDlgItemText(hDlg, IDC_EDIT1, filename_buf, BUFSIZE);
             SetEvent(hWriteEvent); // 쓰기 완료 알리기
             
 
