@@ -165,12 +165,13 @@ void CShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGr
 		pd3dGraphicsRootSignature->AddRef();
 	}
 
-	ID3DBlob *pd3dVertexShaderBlob = NULL, *pd3dPixelShaderBlob = NULL, *pd3dHullShaderBlob = NULL, *pd3dDomainShaderBlob = NULL;
+	ID3DBlob *pd3dVertexShaderBlob = NULL, * pd3dGeometryShaderBlob = NULL, *pd3dPixelShaderBlob = NULL, *pd3dHullShaderBlob = NULL, *pd3dDomainShaderBlob = NULL;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
 	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
+	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
 	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
 	d3dPipelineStateDesc.HS = CreateHullShader(&pd3dHullShaderBlob);
 	d3dPipelineStateDesc.DS = CreateDomainShader(&pd3dDomainShaderBlob);
@@ -188,6 +189,8 @@ void CShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGr
 	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void **)&m_ppd3dPipelineStates[0]);
 
 	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
+	if (pd3dGeometryShaderBlob) pd3dGeometryShaderBlob->Release();
+
 	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();
 	if (pd3dHullShaderBlob) pd3dHullShaderBlob->Release();
 	if (pd3dDomainShaderBlob) pd3dDomainShaderBlob->Release();
@@ -505,297 +508,6 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera 
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-CBillboardObjectsShader::CBillboardObjectsShader()
-{
-}
-
-CBillboardObjectsShader::~CBillboardObjectsShader()
-{
-}
-
-D3D12_INPUT_LAYOUT_DESC CBillboardObjectsShader::CreateInputLayout()
-{
-	UINT nInputElementDescs = 4;
-	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-
-	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[2] = { "INSTANCEPOSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1 };
-	pd3dInputElementDescs[3] = { "BILLBOARDINFO", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 12, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1 };
-
-	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-	d3dInputLayoutDesc.NumElements = nInputElementDescs;
-
-	return(d3dInputLayoutDesc);
-}
-
-D3D12_SHADER_BYTECODE CBillboardObjectsShader::CreateVertexShader(ID3DBlob** ppd3dShaderBlob)
-{
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSBillboardInstancing", "vs_5_1", ppd3dShaderBlob));
-}
-
-D3D12_SHADER_BYTECODE CBillboardObjectsShader::CreatePixelShader(ID3DBlob** ppd3dShaderBlob)
-{
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSBillboardInstancing", "ps_5_1", ppd3dShaderBlob));
-}
-
-D3D12_RASTERIZER_DESC CBillboardObjectsShader::CreateRasterizerState()
-{
-	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
-	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
-	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
-	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
-	d3dRasterizerDesc.DepthBias = 0;
-	d3dRasterizerDesc.DepthBiasClamp = 0.0f;
-	d3dRasterizerDesc.SlopeScaledDepthBias = 0.0f;
-	d3dRasterizerDesc.DepthClipEnable = TRUE;
-	d3dRasterizerDesc.MultisampleEnable = FALSE;
-	d3dRasterizerDesc.AntialiasedLineEnable = FALSE;
-	d3dRasterizerDesc.ForcedSampleCount = 0;
-	d3dRasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-
-	return(d3dRasterizerDesc);
-}
-
-D3D12_DEPTH_STENCIL_DESC CBillboardObjectsShader::CreateDepthStencilState()
-{
-	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
-	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
-	d3dDepthStencilDesc.DepthEnable = TRUE;
-	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	d3dDepthStencilDesc.StencilEnable = FALSE;
-	d3dDepthStencilDesc.StencilReadMask = 0x00;
-	d3dDepthStencilDesc.StencilWriteMask = 0x00;
-	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
-	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
-	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
-	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
-	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
-	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
-
-	return(d3dDepthStencilDesc);
-}
-
-D3D12_BLEND_DESC CBillboardObjectsShader::CreateBlendState()
-{
-	D3D12_BLEND_DESC d3dBlendDesc;
-	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
-	d3dBlendDesc.AlphaToCoverageEnable = TRUE;
-	d3dBlendDesc.IndependentBlendEnable = FALSE;
-	d3dBlendDesc.RenderTarget[0].BlendEnable = TRUE;
-	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
-	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
-	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-
-	return(d3dBlendDesc);
-}
-
-void CBillboardObjectsShader::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
-{
-}
-
-void CBillboardObjectsShader::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
-{
-}
-
-void CBillboardObjectsShader::ReleaseShaderVariables()
-{
-	if (m_pBillboardMaterial) m_pBillboardMaterial->ReleaseShaderVariables();
-
-	CTexturedShader::ReleaseShaderVariables();
-}
-
-void CBillboardObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pContext)
-{
-	CTexturedVertex pVertices[6];
-	pVertices[0] = CTexturedVertex(XMFLOAT3(-4.0f, +4.0f, 1.0f), XMFLOAT2(0.0f, 0.0f));
-	pVertices[1] = CTexturedVertex(XMFLOAT3(+4.0f, +4.0f, 1.0f), XMFLOAT2(1.0f, 0.0f));
-	pVertices[2] = CTexturedVertex(XMFLOAT3(+4.0f, -4.0f, 1.0f), XMFLOAT2(1.0f, 1.0f));
-	pVertices[3] = CTexturedVertex(XMFLOAT3(-4.0f, +4.0f, 1.0f), XMFLOAT2(0.0f, 0.0f));
-	pVertices[4] = CTexturedVertex(XMFLOAT3(+4.0f, -4.0f, 1.0f), XMFLOAT2(1.0f, 1.0f));
-	pVertices[5] = CTexturedVertex(XMFLOAT3(-4.0f, -4.0f, 1.0f), XMFLOAT2(0.0f, 1.0f));
-
-	//pVertices[0] = CTexturedVertex(XMFLOAT3(-4.0f, +4.0f, 0.0f), XMFLOAT2(1.0f, 0.0f));
-	//pVertices[1] = CTexturedVertex(XMFLOAT3(-4.0f, -4.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
-	//pVertices[2] = CTexturedVertex(XMFLOAT3(+4.0f, -4.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	//pVertices[3] = CTexturedVertex(XMFLOAT3(+4.0f, -4.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	//pVertices[4] = CTexturedVertex(XMFLOAT3(+4.0f, +4.0f, 0.0f), XMFLOAT2(0.0f, 0.0f));
-	//pVertices[5] = CTexturedVertex(XMFLOAT3(-4.0f, +4.0f, 0.0f), XMFLOAT2(1.0f, 0.0f));
-
-	m_pd3dVertexBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices, sizeof(CTexturedVertex) * 6, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dVertexUploadBuffer);
-
-	m_d3dVertexBufferView.BufferLocation = m_pd3dVertexBuffer->GetGPUVirtualAddress();
-	m_d3dVertexBufferView.StrideInBytes = sizeof(CTexturedVertex);
-	m_d3dVertexBufferView.SizeInBytes = sizeof(CTexturedVertex) * 6;
-
-	CRawFormatImage* pRawFormatImage = new CRawFormatImage(L"Image/ObjectsMap.raw", 257, 257, true);
-
-	int nGrassObjects = 0, nFlowerObjects = 0, nBlacks = 0, nOthers = 0, nTreeObjects[3] = { 0, 0, 0 };
-	for (int z = 2; z <= 254; z++)
-	{
-		for (int x = 2; x <= 254; x++)
-		{
-			BYTE nPixel = pRawFormatImage->GetRawImagePixel(x, z);
-			switch (nPixel)
-			{
-			case 102: nGrassObjects++; break;
-			case 128: nGrassObjects++; break;
-			case 153: nFlowerObjects++; break;
-			case 179: nFlowerObjects++; break;
-			case 204: nTreeObjects[0]++; break;
-			case 225: nTreeObjects[1]++; break;
-			case 255: nTreeObjects[2]++; break;
-			case 0: nBlacks++; break;
-			default: nOthers++; break;
-			}
-		}
-	}
-	m_nInstances = nGrassObjects + nFlowerObjects + nTreeObjects[0] + nTreeObjects[1] + nTreeObjects[2];
-	VS_VB_BILLBOARD_INSTANCE* pInstanceInfos = new VS_VB_BILLBOARD_INSTANCE[m_nInstances];
-
-	CTexture* pBillboardTexture = new CTexture(7, RESOURCE_TEXTURE2D_ARRAY, 0, 1);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Grass01.dds", RESOURCE_TEXTURE2D, 0);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Grass02.dds", RESOURCE_TEXTURE2D, 1);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Flower01.dds", RESOURCE_TEXTURE2D, 2);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Flower02.dds", RESOURCE_TEXTURE2D, 3);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Tree01.dds", RESOURCE_TEXTURE2D, 4);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Tree02.dds", RESOURCE_TEXTURE2D, 5);
-	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Tree03.dds", RESOURCE_TEXTURE2D, 6);
-
-	m_pBillboardMaterial = new CMaterial();
-	m_pBillboardMaterial->SetTexture(pBillboardTexture);
-
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, 0, 7);
-	CreateShaderResourceViews(pd3dDevice, pBillboardTexture, 0, 10);
-
-	CHeightMapTerrain* pTerrain = (CHeightMapTerrain*)pContext;
-	int nTerrainWidth = int(pTerrain->GetWidth());
-	int nTerrainLength = int(pTerrain->GetLength());
-	XMFLOAT3 xmf3TerrainScale = pTerrain->GetScale();
-
-	for (int nObjects = 0, z = 2; z <= 254; z++)
-	{
-		for (int x = 2; x <= 254; x++)
-		{
-			int nBillboardType = -1; //1:Grass, 2:Flower, 3:Tree
-			int nTextureType = -1; //1:Grass0, 2:Grass1, 3:Flower0, 4:Flower1, 5:Tree1, 6: Tree2, 7: Tree3
-			float fxWidth = 0.0f, fyHeight = 0.0f;
-
-			BYTE nPixel = pRawFormatImage->GetRawImagePixel(x, z);
-			switch (nPixel)
-			{
-			case 102:
-				fxWidth = 8.0f;
-				fyHeight = 8.0f;
-				nBillboardType = 1;
-				nTextureType = 1;
-				break;
-			case 128:
-				fxWidth = 8.0f;
-				fyHeight = 6.0f;
-				nBillboardType = 1;
-				nTextureType = 2;
-				break;
-			case 153:
-				fxWidth = 8.0f;
-				fyHeight = 16.0f;
-				nBillboardType = 2;
-				nTextureType = 3;
-				break;
-			case 179:
-				fxWidth = 8.0f;
-				fyHeight = 16.0f;
-				nBillboardType = 2;
-				nTextureType = 4;
-				break;
-			case 204:
-				fxWidth = 24.0f;
-				fyHeight = 36.0f;
-				nBillboardType = 3;
-				nTextureType = 5;
-				break;
-			case 225:
-				fxWidth = 24.0f;
-				fyHeight = 36.0f;
-				nBillboardType = 3;
-				nTextureType = 6;
-				break;
-			case 255:
-				fxWidth = 16.0f;
-				fyHeight = 36.0f;
-				nBillboardType = 3;
-				nTextureType = 7;
-				break;
-			default:
-				break;
-			}
-			if (nBillboardType != -1)
-			{
-				float fyOffset = fyHeight * 0.5f;
-				float xPosition = x * xmf3TerrainScale.x;
-				float zPosition = z * xmf3TerrainScale.z;
-				float fHeight = pTerrain->GetHeight(xPosition, zPosition);
-				pInstanceInfos[nObjects].m_xmf3Position = XMFLOAT3(xPosition, fHeight + fyOffset, zPosition);
-				pInstanceInfos[nObjects++].m_xmf4BillboardInfo = XMFLOAT4(fxWidth, fyHeight, float(nBillboardType), float(nTextureType));
-			}
-		}
-	}
-	m_pd3dInstancesBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, pInstanceInfos, sizeof(VS_VB_BILLBOARD_INSTANCE) * m_nInstances, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dInstanceUploadBuffer);
-
-	m_d3dInstancingBufferView.BufferLocation = m_pd3dInstancesBuffer->GetGPUVirtualAddress();
-	m_d3dInstancingBufferView.StrideInBytes = sizeof(VS_VB_BILLBOARD_INSTANCE);
-	m_d3dInstancingBufferView.SizeInBytes = sizeof(VS_VB_BILLBOARD_INSTANCE) * m_nInstances;
-
-	if (pInstanceInfos) delete[] pInstanceInfos;
-}
-
-void CBillboardObjectsShader::ReleaseUploadBuffers()
-{
-	if (m_pd3dVertexUploadBuffer) m_pd3dVertexUploadBuffer->Release();
-	if (m_pd3dInstanceUploadBuffer) m_pd3dInstanceUploadBuffer->Release();
-
-	m_pBillboardMaterial->ReleaseUploadBuffers();
-
-	CTexturedShader::ReleaseUploadBuffers();
-}
-
-void CBillboardObjectsShader::ReleaseObjects()
-{
-	CTexturedShader::ReleaseObjects();
-
-	if (m_pBillboardMaterial) m_pBillboardMaterial->Release();
-
-	if (m_pd3dVertexBuffer) m_pd3dVertexBuffer->Release();
-	if (m_pd3dInstancesBuffer) m_pd3dInstancesBuffer->Release();
-}
-
-void CBillboardObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
-{
-	CTexturedShader::Render(pd3dCommandList, pCamera);
-
-	m_pBillboardMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
-
-	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_d3dVertexBufferView, m_d3dInstancingBufferView };
-	pd3dCommandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
-	pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	pd3dCommandList->DrawInstanced(6, m_nInstances, 0, 0);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 CTerrainShader::CTerrainShader()
 {
 }
@@ -958,24 +670,22 @@ void CTerrainTessellationShader::OnPrepareRender(ID3D12GraphicsCommandList* pd3d
 	UpdateShaderVariables(pd3dCommandList);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-CDynamicCubeMappingShader::CDynamicCubeMappingShader(UINT nCubeMapSize)
-{
-	m_nCubeMapSize = nCubeMapSize; 
-}
-
-CDynamicCubeMappingShader::~CDynamicCubeMappingShader()
+CSnowBillboardObjectsShader::CSnowBillboardObjectsShader()
 {
 }
 
-D3D12_INPUT_LAYOUT_DESC CDynamicCubeMappingShader::CreateInputLayout()
+CSnowBillboardObjectsShader::~CSnowBillboardObjectsShader()
 {
+}
+
+D3D12_INPUT_LAYOUT_DESC CSnowBillboardObjectsShader::CreateInputLayout()
+{
+
 	UINT nInputElementDescs = 2;
-	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
 	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "SIZE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
@@ -984,108 +694,114 @@ D3D12_INPUT_LAYOUT_DESC CDynamicCubeMappingShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_SHADER_BYTECODE CDynamicCubeMappingShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_DEPTH_STENCIL_DESC CSnowBillboardObjectsShader::CreateDepthStencilState()
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSCubeMapping", "vs_5_1", ppd3dShaderBlob));
+	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
+	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
+	d3dDepthStencilDesc.DepthEnable = TRUE;
+	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	d3dDepthStencilDesc.StencilEnable = FALSE;
+	d3dDepthStencilDesc.StencilReadMask = 0x00;
+	d3dDepthStencilDesc.StencilWriteMask = 0x00;
+	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+
+	return(d3dDepthStencilDesc);
 }
 
-D3D12_SHADER_BYTECODE CDynamicCubeMappingShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
+D3D12_BLEND_DESC CSnowBillboardObjectsShader::CreateBlendState()
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSCubeMapping", "ps_5_1", ppd3dShaderBlob));
+	D3D12_BLEND_DESC d3dBlendDesc;
+	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
+	d3dBlendDesc.AlphaToCoverageEnable = TRUE;
+	d3dBlendDesc.IndependentBlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = TRUE;
+	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return(d3dBlendDesc);
 }
 
-void CDynamicCubeMappingShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext)
+void CSnowBillboardObjectsShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
-	pd3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), (void**)&m_pd3dCommandAllocator);
-	pd3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_pd3dCommandAllocator, NULL, __uuidof(ID3D12GraphicsCommandList), (void**)&m_pd3dCommandList);
-	m_pd3dCommandList->Close();
+	m_nPipelineStates = 1;
+	m_ppd3dPipelineStates = new ID3D12PipelineState * [m_nPipelineStates];
 
-	m_nObjects = 2;
-	m_ppObjects = new CGameObject*[m_nObjects];
+	CShader::CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, m_nObjects, m_nObjects);
-	CreateConstantBufferViews(pd3dDevice, m_nObjects, m_pd3dcbGameObjects, ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255));
-
-	D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorStartHandle = m_d3dCbvGPUDescriptorStartHandle;
-
-	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
-	d3dDescriptorHeapDesc.NumDescriptors = m_nObjects;
-	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	d3dDescriptorHeapDesc.NodeMask = 0;
-	HRESULT hResult = pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&m_pd3dDsvDescriptorHeap);
-
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle = m_pd3dDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-
-	d3dDescriptorHeapDesc.NumDescriptors = m_nObjects * 6;
-	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&m_pd3dRtvDescriptorHeap);
-
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_pd3dRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-
-	CMesh* pMeshIlluminated = new CSphereMeshIlluminated(pd3dDevice, pd3dCommandList, 100.0f, 20, 20);
-	
-	CHeightMapTerrain* pTerrain = (CHeightMapTerrain*)pContext;
-	XMFLOAT2 xmf2TerrainCenter = XMFLOAT2(pTerrain->GetWidth() * 0.5f, pTerrain->GetLength() * 0.5f);
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		m_ppObjects[i] = new CDynamicCubeMappingObject(pd3dDevice, pd3dCommandList, m_nCubeMapSize, d3dDsvCPUDescriptorHandle, d3dRtvCPUDescriptorHandle, this);
-
-		m_ppObjects[i]->SetMesh(0, pMeshIlluminated);
-
-		float xPosition = xmf2TerrainCenter.x + ((i + 1) * 150.0f) * ((i % 2) ? +1.0f : -1.0f);
-		float zPosition = xmf2TerrainCenter.y + ((i + 1) * 150.0f) * ((i % 2) ? +1.0f : -1.0f);
-		float fHeight = pTerrain->GetHeight(xPosition, zPosition);
-		m_ppObjects[i]->SetPosition(xPosition, fHeight + 150.0f, zPosition);
-
-		m_ppObjects[i]->SetCbvGPUDescriptorHandlePtr(d3dCbvGPUDescriptorStartHandle.ptr);
-
-		d3dCbvGPUDescriptorStartHandle.ptr += ::gnCbvSrvDescriptorIncrementSize;
-		d3dDsvCPUDescriptorHandle.ptr += ::gnDsvDescriptorIncrementSize;
-		d3dRtvCPUDescriptorHandle.ptr += (::gnRtvDescriptorIncrementSize * 6);
-	}
 }
 
-void CDynamicCubeMappingShader::ReleaseObjects()
+void CSnowBillboardObjectsShader::ReleaseShaderVariables()
 {
-	CObjectsShader::ReleaseObjects();
+	if (m_pBillboardMaterial)m_pBillboardMaterial->ReleaseShaderVariables();
 
-	if (m_pd3dDsvDescriptorHeap) m_pd3dDsvDescriptorHeap->Release();
-	if (m_pd3dRtvDescriptorHeap) m_pd3dRtvDescriptorHeap->Release();
+	CTexturedShader::ReleaseShaderVariables();
 
-	if (m_pd3dCommandAllocator) m_pd3dCommandAllocator->Release();
-	if (m_pd3dCommandList) m_pd3dCommandList->Release();
 }
 
-void CDynamicCubeMappingShader::ReleaseUploadBuffers()
+void CSnowBillboardObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pContext)
 {
-	CObjectsShader::ReleaseUploadBuffers();
+	m_pSnowBillboardMesh = new CSnowBillboardMesh(pd3dDevice, pd3dCommandList, 2.0f, 2.0f);
+
+	CTexture* pBillboardTexture = new CTexture(5, RESOURCE_TEXTURE2D_ARRAY, 0, 1);
+	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_0.dds", RESOURCE_TEXTURE2D, 0);
+	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_1.dds", RESOURCE_TEXTURE2D, 1);
+	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_2.dds", RESOURCE_TEXTURE2D, 2);
+	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_3.dds", RESOURCE_TEXTURE2D, 3);
+	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_4.dds", RESOURCE_TEXTURE2D, 4);
+
+	m_pBillboardMaterial = new CMaterial();
+	m_pBillboardMaterial->SetTexture(pBillboardTexture);
+
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, 0, 5);
+	CreateShaderResourceViews(pd3dDevice, pBillboardTexture, 0, 10);
 }
 
-void CDynamicCubeMappingShader::OnPreRender(ID3D12Device* pd3dDevice, ID3D12CommandQueue* pd3dCommandQueue, ID3D12Fence* pd3dFence, HANDLE hFenceEvent, CScene* pScene)
+void CSnowBillboardObjectsShader::ReleaseObjects()
 {
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		m_pd3dCommandAllocator->Reset();
-		m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
+	CTexturedShader::ReleaseObjects();
 
-		m_ppObjects[i]->OnPreRender(m_pd3dCommandList, pScene);
+	if (m_pBillboardMaterial)m_pBillboardMaterial->Release();
 
-		m_pd3dCommandList->Close();
-
-		ID3D12CommandList* ppd3dCommandLists[] = { m_pd3dCommandList };
-		pd3dCommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);
-
-		UINT64 nFenceValue = pd3dFence->GetCompletedValue();
-		::WaitForGpuComplete(pd3dCommandQueue, pd3dFence, nFenceValue + 1, hFenceEvent);
-	}
+	if (m_pSnowBillboardMesh)m_pSnowBillboardMesh->Release();
 }
 
-void CDynamicCubeMappingShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
+void CSnowBillboardObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
-	CObjectsShader::Render(pd3dCommandList, pCamera);
+	CTexturedShader::Render(pd3dCommandList, pCamera);
+
+	m_pBillboardMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
+
+	pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	pd3dCommandList->DrawInstanced(SNOW_NUM, 0, 0, 0);
 }
 
+D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreateVertexShader(ID3DBlob** ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VS_SnowBillboard", "vs_5_1", ppd3dShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreateGeometryShader(ID3DBlob** ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "GS_SnowBillboard", "vs_5_1", ppd3dShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreatePixelShader(ID3DBlob** ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PS_SnowBillboard", "vs_5_1", ppd3dShaderBlob));
+}

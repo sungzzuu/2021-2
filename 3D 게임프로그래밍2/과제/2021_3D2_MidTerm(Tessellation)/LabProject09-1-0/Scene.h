@@ -77,9 +77,6 @@ protected:
 	CHeightMapTerrain			*m_pTerrain = NULL;
 	CSkyBox						*m_pSkyBox = NULL;
 
-	CDynamicCubeMappingShader	**m_ppEnvironmentMappingShaders = NULL;
-	int							m_nEnvironmentMappingShaders = 0;
-
 	ID3D12RootSignature			*m_pd3dGraphicsRootSignature = NULL;
 
 	CGameObject**				m_ppObjects = NULL;

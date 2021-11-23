@@ -64,6 +64,8 @@ using Microsoft::WRL::ComPtr;
 #define SPOT_LIGHT				2
 #define DIRECTIONAL_LIGHT		3
 
+
+#define SNOW_NUM				50
 #define _WITH_TERRAIN_TESSELATION
 
 #ifdef _WITH_TERRAIN_TESSELATION
