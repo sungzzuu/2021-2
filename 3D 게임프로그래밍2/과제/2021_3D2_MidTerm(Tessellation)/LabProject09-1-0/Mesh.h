@@ -252,3 +252,23 @@ public:
 	virtual ~CTexturedRectMesh();
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CSnowBillboardMesh : public CMesh
+{
+public:
+	CSnowBillboardMesh(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, float fWidth = 20.0f, float fHeight = 20.0f);
+	virtual ~CSnowBillboardMesh();
+};
+
+class CSnowVertex : public CVertex {
+
+public:
+	XMFLOAT3 m_xmf3Position;
+	XMFLOAT2 m_xmf2Size;
+
+	CSnowVertex() { m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2Size = XMFLOAT2(0.0f, 0.0f); }
+	CSnowVertex(XMFLOAT3 xmf3Position, XMFLOAT2 xmf2Size) { m_xmf3Position = xmf3Position; m_xmf2Size = xmf2Size; }
+	~CSnowVertex() { }
+	
+};

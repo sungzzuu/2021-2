@@ -115,71 +115,6 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input, uint primitiveID : SV_PrimitiveID) :
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-#define _WITH_BILLBOARD_ANIMATION
-
-struct VS_BILLBOARD_INSTANCING_INPUT
-{
-	float3 position : POSITION;
-	float2 uv : TEXCOORD;
-	float3 instancePosition : INSTANCEPOSITION;
-	float4 billboardInfo : BILLBOARDINFO; //(cx, cy, type, texture)
-};
-
-struct VS_BILLBOARD_INSTANCING_OUTPUT
-{
-	float4 position : SV_POSITION;
-	float2 uv : TEXCOORD;
-	int textureID : TEXTUREID;
-};
-
-#define _WITH_BILLBOARD_ANIMATION
-
-VS_BILLBOARD_INSTANCING_OUTPUT VSBillboardInstancing(VS_BILLBOARD_INSTANCING_INPUT input)
-{
-	VS_BILLBOARD_INSTANCING_OUTPUT output;
-
-	if (input.position.x < 0.0f) input.position.x = -(input.billboardInfo.x * 0.5f);
-	else if (input.position.x > 0.0f) input.position.x = (input.billboardInfo.x * 0.5f);
-	if (input.position.y < 0.0f) input.position.y = -(input.billboardInfo.y * 0.5f);
-	else if (input.position.y > 0.0f) input.position.y = (input.billboardInfo.y * 0.5f);
-
-	float3 f3Look = normalize(gvCameraPosition - input.instancePosition);
-	float3 f3Up = float3(0.0f, 1.0f, 0.0f);
-	float3 f3Right = normalize(cross(f3Up, f3Look));
-
-	matrix mtxWorld;
-	mtxWorld[0] = float4(f3Right, 0.0f);
-	mtxWorld[1] = float4(f3Up, 0.0f);
-	mtxWorld[2] = float4(f3Look, 0.0f);
-	mtxWorld[3] = float4(input.instancePosition, 1.0f);
-
-	output.position = mul(mul(mul(float4(input.position, 1.0f), mtxWorld), gmtxView), gmtxProjection);
-
-#ifdef _WITH_BILLBOARD_ANIMATION
-	if (input.uv.y < 0.7f)
-	{
-		float fShift = 0.0f;
-		uint nResidual = ((uint)gfCurrentTime % 4);
-		if (nResidual == 1) fShift = -gfElapsedTime * 10.5f;
-		if (nResidual == 3) fShift = +gfElapsedTime * 10.5f;
-		input.uv.x += fShift;
-	}
-#endif
-	output.uv = input.uv;
-
-	output.textureID = (int)input.billboardInfo.w - 1;
-
-	return(output);
-}
-
-Texture2D<float4> gtxtBillboardTextures[7] : register(t7);
-
-float4 PSBillboardInstancing(VS_BILLBOARD_INSTANCING_OUTPUT input) : SV_TARGET
-{
-	float4 cColor = gtxtBillboardTextures[NonUniformResourceIndex(input.textureID)].Sample(gWrapSamplerState, input.uv);
-
-	return(cColor);
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -192,9 +127,16 @@ float4 PSSkyBox(VS_TEXTURED_OUTPUT input) : SV_TARGET
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-Texture2D<float4> gtxtTerrainBaseTexture : register(t4);
-Texture2D<float4> gtxtTerrainDetailTexture : register(t5);
-Texture2D<float> gtxtTerrainAlphaTexture : register(t6);
+
+
+
+Texture2D<float4> gtxtTerrainBaseTexture : register(t1);
+Texture2D<float4> gtxtTerrainDetailTexture : register(t2);
+Texture2D<float> gtxtTerrainAlphaTexture : register(t3);
+
+////////// billboard
+Texture2DArray gSnowTextureArray : register(t4);
+////////////
 
 struct VS_TERRAIN_INPUT
 {
@@ -431,4 +373,100 @@ float4 PSTerrainTessellation(DS_TERRAIN_TESSELLATION_OUTPUT input) : SV_TARGET
 	return(cColor);
 }
 
+//////////////////////////////////////////////////////////////////////////
+struct VertexIn
+{
+    float3 PosW : POSITION;
+    float2 SizeW : SIZE;
+};
 
+struct VertexOut
+{
+    float3 CenterW : POSITION;
+    float2 SizeW : SIZE;
+};
+
+struct GeoOut
+{
+    float4 PosH : SV_POSITION;
+    float3 PosW : POSITION;
+    float3 NormalW : NORMAL;
+    float2 TexC : TEXCOORD;
+    uint PrimID : SV_PrimitiveID;
+};
+
+VertexOut VS_SnowBillboard(VertexIn vin)
+{
+    VertexOut vout;
+
+	// Just pass data over to geometry shader.
+    vout.CenterW = vin.PosW;
+    vout.SizeW = vin.SizeW;
+
+    return vout;
+}
+
+[maxvertexcount(4)]
+void GS_SnowBillboard(point VertexOut gin[1],
+        uint primID : SV_PrimitiveID,
+        inout TriangleStream<GeoOut> triStream)
+{
+	//
+	// Compute the local coordinate system of the sprite relative to the world
+	// space such that the billboard is aligned with the y-axis and faces the eye.
+	//
+
+    float3 up = float3(0.0f, 1.0f, 0.0f);
+    float3 look = gvCameraPosition - gin[0].CenterW;
+    look.y = 0.0f; // y-axis aligned, so project to xz-plane
+    look = normalize(look);
+    float3 right = cross(up, look);
+
+	//
+	// Compute triangle strip vertices (quad) in world space.
+	//
+    float halfWidth = 0.5f * gin[0].SizeW.x;
+    float halfHeight = 0.5f * gin[0].SizeW.y;
+	
+    float4 v[4];
+    v[0] = float4(gin[0].CenterW + halfWidth * right - halfHeight * up, 1.0f);
+    v[1] = float4(gin[0].CenterW + halfWidth * right + halfHeight * up, 1.0f);
+    v[2] = float4(gin[0].CenterW - halfWidth * right - halfHeight * up, 1.0f);
+    v[3] = float4(gin[0].CenterW - halfWidth * right + halfHeight * up, 1.0f);
+
+	//
+	// Transform quad vertices to world space and output 
+	// them as a triangle strip.
+	//
+	
+    float2 texC[4] =
+    {
+        float2(0.0f, 1.0f),
+		float2(0.0f, 0.0f),
+		float2(1.0f, 1.0f),
+		float2(1.0f, 0.0f)
+    };
+	
+    GeoOut gout;
+	//[unroll]
+    for (int i = 0; i < 4; ++i)
+    {
+        gout.PosH = mul(v[i], gmtxViewProjection);
+        gout.PosW = v[i].xyz;
+        gout.NormalW = look;
+        gout.TexC = texC[i];
+        gout.PrimID = primID;
+		
+        triStream.Append(gout);
+    }
+}
+
+float4 PS_SnowBillboard(GeoOut input) : SV_Target
+{
+    float4 clIlumination = Lighting(input.PosW, input.NormalW);
+    float3 uvw = float3(input.TexC, (input.PrimID % 4));
+    float4 cTexture = gSnowTextureArray.Sample(gClampSamplerState, uvw);
+    float4 cColor = clIlumination * cTexture;
+    cColor = cTexture.a;
+    return (cColor);
+}

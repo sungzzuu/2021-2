@@ -336,7 +336,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
 	XMFLOAT3 xmf3Position(0.0f, 0.0f, 0.0f);
-	if (pTerrain) xmf3Position = XMFLOAT3(pTerrain->GetWidth() * 0.5f, 2000.0f, pTerrain->GetLength() * 0.5f);
+	if (pTerrain) xmf3Position = XMFLOAT3(20.f, pTerrain->GetHeight(20.f,20.f), 20.f);
 	SetPosition(xmf3Position);
 	SetPlayerUpdatedContext(pTerrain);
 	SetCameraUpdatedContext(pTerrain);
@@ -379,7 +379,7 @@ CCamera *CTerrainPlayer::ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed)
 			SetMaxVelocityY(400.0f);
 			m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 			m_pCamera->SetTimeLag(0.25f);
-			m_pCamera->SetOffset(XMFLOAT3(0.0f, 20.0f, -50.0f));
+			m_pCamera->SetOffset(XMFLOAT3(0.0f, 50.0f, -100.0f));
 			m_pCamera->GenerateProjectionMatrix(1.01f, 10000.0f, ASPECT_RATIO, 60.0f);
 			break;
 		default:
