@@ -284,7 +284,7 @@ void CShader::OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList, CCamer
 
 void CShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
 {
-	OnPrepareRender(pd3dCommandList, pCamera, NULL);
+	OnPrepareRender(pd3dCommandList, pCamera, NULL); 
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -738,10 +738,44 @@ D3D12_BLEND_DESC CSnowBillboardObjectsShader::CreateBlendState()
 
 void CSnowBillboardObjectsShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
-	/*m_nPipelineStates = 1;
-	m_ppd3dPipelineStates = new ID3D12PipelineState * [m_nPipelineStates];*/
+	m_nPipelineStates = 1;
+	m_ppd3dPipelineStates = new ID3D12PipelineState * [m_nPipelineStates];
 
-	CShader::CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	if (pd3dGraphicsRootSignature)
+	{
+		m_pd3dGraphicsRootSignature = pd3dGraphicsRootSignature;
+		pd3dGraphicsRootSignature->AddRef();
+	}
+
+	ID3DBlob* pd3dVertexShaderBlob = NULL, * pd3dGeometryShaderBlob = NULL, * pd3dPixelShaderBlob = NULL, * pd3dHullShaderBlob = NULL, * pd3dDomainShaderBlob = NULL;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
+	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
+	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
+	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
+	d3dPipelineStateDesc.BlendState = CreateBlendState();
+	d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	d3dPipelineStateDesc.InputLayout = CreateInputLayout();
+	d3dPipelineStateDesc.SampleMask = UINT_MAX;
+	d3dPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT; //D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH
+	d3dPipelineStateDesc.NumRenderTargets = 1;
+	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	d3dPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	d3dPipelineStateDesc.SampleDesc.Count = 1;
+	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&m_ppd3dPipelineStates[0]);
+
+	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
+	if (pd3dGeometryShaderBlob) pd3dGeometryShaderBlob->Release();
+
+	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();
+	if (pd3dHullShaderBlob) pd3dHullShaderBlob->Release();
+	if (pd3dDomainShaderBlob) pd3dDomainShaderBlob->Release();
+
+	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[] d3dPipelineStateDesc.InputLayout.pInputElementDescs;
 
 }
 
@@ -755,7 +789,7 @@ void CSnowBillboardObjectsShader::ReleaseShaderVariables()
 
 void CSnowBillboardObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pContext)
 {
-	m_pSnowBillboardMesh = new CSnowBillboardMesh(pd3dDevice, pd3dCommandList, 2.0f, 2.0f);
+	m_pSnowBillboardMesh = new CSnowBillboardMesh(pd3dDevice, pd3dCommandList, 1.0f, 1.0f);
 
 	CTexture* pBillboardTexture = new CTexture(5, RESOURCE_TEXTURE2D_ARRAY, 0, 1);
 	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_0.dds", RESOURCE_TEXTURE2D, 0);
@@ -767,7 +801,7 @@ void CSnowBillboardObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12G
 	m_pBillboardMaterial = new CMaterial();
 	m_pBillboardMaterial->SetTexture(pBillboardTexture);
 
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, 0, 5);
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, 1, 5);
 	CreateShaderResourceViews(pd3dDevice, pBillboardTexture, 0, 10);
 }
 
@@ -786,8 +820,8 @@ void CSnowBillboardObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandL
 
 	m_pBillboardMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
-	pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-	pd3dCommandList->DrawInstanced(SNOW_NUM, 0, 0, 0);
+	m_pSnowBillboardMesh->Render(pd3dCommandList);
+
 }
 
 D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreateVertexShader(ID3DBlob** ppd3dShaderBlob)
