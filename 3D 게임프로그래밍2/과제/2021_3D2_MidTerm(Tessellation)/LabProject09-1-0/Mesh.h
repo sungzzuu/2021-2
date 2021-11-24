@@ -248,27 +248,35 @@ public:
 class CTexturedRectMesh : public CMesh
 {
 public:
-	CTexturedRectMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float fWidth=20.0f, float fHeight=20.0f, float fDepth=20.0f, float fxPosition=0.0f, float fyPosition=0.0f, float fzPosition=0.0f);
+	CTexturedRectMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float fWidth=10.0f, float fHeight= 10.0f, float fDepth=10.0f, float fxPosition=0.0f, float fyPosition=0.0f, float fzPosition=0.0f);
 	virtual ~CTexturedRectMesh();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CSnowBillboardMesh : public CMesh
-{
-public:
-	CSnowBillboardMesh(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, float fWidth = 20.0f, float fHeight = 20.0f);
-	virtual ~CSnowBillboardMesh();
-};
-
 class CSnowVertex : public CVertex {
 
 public:
-	XMFLOAT3 m_xmf3Position;
 	XMFLOAT2 m_xmf2Size;
 
 	CSnowVertex() { m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2Size = XMFLOAT2(0.0f, 0.0f); }
 	CSnowVertex(XMFLOAT3 xmf3Position, XMFLOAT2 xmf2Size) { m_xmf3Position = xmf3Position; m_xmf2Size = xmf2Size; }
 	~CSnowVertex() { }
-	
+
+};
+class CSnowBillboardMesh : public CMesh
+{
+public:
+	CSnowVertex* m_pVertices = NULL;
+
+	CSnowBillboardMesh(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, float fWidth = 20.0f, float fHeight = 20.0f);
+	virtual ~CSnowBillboardMesh();
+};
+
+
+
+struct CB_SNOW_INFO
+{
+	XMFLOAT3 m_xmf3Position;
+	XMFLOAT2 m_xmf2Size;
 };

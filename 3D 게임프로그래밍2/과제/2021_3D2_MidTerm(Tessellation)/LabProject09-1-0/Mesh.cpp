@@ -873,16 +873,18 @@ CSnowBillboardMesh::CSnowBillboardMesh(ID3D12Device* pd3dDevice, ID3D12GraphicsC
 
 	XMFLOAT3 xmf3Position;
 
-	CSnowVertex* pSnowVertices = new CSnowVertex[SNOW_NUM];
+	m_pVertices = new CSnowVertex[SNOW_NUM];
 
 	for (int i = 0; i < SNOW_NUM; i++)
 	{
-		float fx = xmf3Position.x = rand() % 100 + 50;
-		float fz = xmf3Position.z = 200;
-		float fy = xmf3Position.y = rand() % 100;
-		pSnowVertices[i] = CSnowVertex(xmf3Position, XMFLOAT2(1.f, 1.1f));
+		
+		float fx = xmf3Position.x = rand()%100 + 50;
+		float fz = xmf3Position.z = rand() % 100 + 50;
+		float fy = xmf3Position.y = rand() % 100 +300;
+		m_pVertices[i] = CSnowVertex(xmf3Position, XMFLOAT2(10.f, 10.f));
 	}
-	m_pd3dVertexBuffer = CreateBufferResource(pd3dDevice, pd3dCommandList, pSnowVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dVertexUploadBuffer);
+	m_pd3dVertexBuffer = CreateBufferResource(pd3dDevice, pd3dCommandList, m_pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
+		&m_pd3dVertexUploadBuffer);
 
 	m_d3dVertexBufferView.BufferLocation = m_pd3dVertexBuffer->GetGPUVirtualAddress();
 	m_d3dVertexBufferView.StrideInBytes = m_nStride;

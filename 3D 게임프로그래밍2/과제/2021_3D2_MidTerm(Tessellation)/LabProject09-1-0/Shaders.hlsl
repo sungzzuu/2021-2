@@ -28,6 +28,12 @@ cbuffer cbFrameworkInfo : register(b5)
 	uint		gnRenderMode : packoffset(c0.z);
 };
 
+cbuffer cbFrameworkInfo : register(b6)
+{
+    float3 gfSnowPos : packoffset(c0);
+    float2 gfSnowSize : packoffset(c1);
+};
+
 #define DYNAMIC_TESSELLATION		0x10
 #define DEBUG_TESSELLATION			0x20
 
@@ -398,11 +404,13 @@ struct GeoOut
 VertexOut VS_SnowBillboard(VertexIn vin)
 {
     VertexOut vout;
-
+    //vin.SizeW = float2(10.f, 10.f);
 	// Just pass data over to geometry shader.
     vout.CenterW = vin.PosW;
     vout.SizeW = vin.SizeW;
 
+    //vout.CenterW = gfSnowPos;
+    //vout.SizeW = gfSnowSize;
     return vout;
 }
 
@@ -415,7 +423,10 @@ void GS_SnowBillboard(point VertexOut gin[1],
 	// Compute the local coordinate system of the sprite relative to the world
 	// space such that the billboard is aligned with the y-axis and faces the eye.
 	//
+    gin[0].CenterW.x += gfSnowPos.x; 
+    //gin[0].SizeW = gfSnowSize;
 
+	
     float3 up = float3(0.0f, 1.0f, 0.0f);
     float3 look = gvCameraPosition.xyz - gin[0].CenterW;
     look.y = 0.0f; // y-axis aligned, so project to xz-plane
@@ -425,9 +436,12 @@ void GS_SnowBillboard(point VertexOut gin[1],
 	//
 	// Compute triangle strip vertices (quad) in world space.
 	//
-    float halfWidth = 0.5f * gin[0].SizeW.x;
-    float halfHeight = 0.5f * gin[0].SizeW.y;
-	
+    float halfWidth = 0.5f * (gin[0].SizeW.x);
+    float halfHeight = 0.5f * (gin[0].SizeW.y);
+    //halfWidth += 10.f;
+    //halfHeight += 10.f;
+    //float halfWidth = 10.f;
+    //float halfHeight = 10.f;
     float4 v[4];
     v[0] = float4(gin[0].CenterW + halfWidth * right - halfHeight * up, 1.0f);
     v[1] = float4(gin[0].CenterW + halfWidth * right + halfHeight * up, 1.0f);
@@ -455,7 +469,7 @@ void GS_SnowBillboard(point VertexOut gin[1],
         gout.PosW = v[i].xyz;
         gout.NormalW = look;
         gout.TexC = texC[i];
-        gout.PrimID = primID;
+        gout.PrimID = primID; //?????프리미티브 아이디가 머야>?
 		
         triStream.Append(gout);
     }
@@ -464,7 +478,7 @@ void GS_SnowBillboard(point VertexOut gin[1],
 float4 PS_SnowBillboard(GeoOut input) : SV_Target
 {
     float4 clIlumination = Lighting(input.PosW, input.NormalW);
-    float3 uvw = float3(input.TexC, (input.PrimID % 4));
+    float3 uvw = float3(input.TexC, (input.PrimID % 5)); // ????????
     float4 cTexture = gSnowTextureArray.Sample(gClampSamplerState, uvw);
     float4 cColor = clIlumination * cTexture;
     cColor = cTexture.a;

@@ -736,6 +736,16 @@ D3D12_BLEND_DESC CSnowBillboardObjectsShader::CreateBlendState()
 	return(d3dBlendDesc);
 }
 
+void CSnowBillboardObjectsShader::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_SNOW_INFO) + 255) & ~255); //256의 배수
+
+	m_pd3dcbSnowBillboard = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes*SNOW_NUM, 
+		D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbSnowBillboard->Map(0, NULL, (void**)&m_pcbMappedSnow);
+}
+
 void CSnowBillboardObjectsShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
 	m_nPipelineStates = 1;
@@ -791,6 +801,7 @@ void CSnowBillboardObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12G
 {
 	m_pSnowBillboardMesh = new CSnowBillboardMesh(pd3dDevice, pd3dCommandList, 1.0f, 1.0f);
 
+
 	CTexture* pBillboardTexture = new CTexture(5, RESOURCE_TEXTURE2D_ARRAY, 0, 1);
 	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_0.dds", RESOURCE_TEXTURE2D, 0);
 	pBillboardTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/particle_snow_1.dds", RESOURCE_TEXTURE2D, 1);
@@ -802,11 +813,35 @@ void CSnowBillboardObjectsShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12G
 	m_pBillboardMaterial->SetTexture(pBillboardTexture);
 
 	CreateCbvSrvDescriptorHeaps(pd3dDevice, 1, 5);
-	CreateShaderResourceViews(pd3dDevice, pBillboardTexture, 0, 10);
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+	CreateShaderResourceViews(pd3dDevice, pBillboardTexture, 0, 11);
+}
+
+void CSnowBillboardObjectsShader::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	// 정점들을 다 줘야해
+
+	UINT ncbElementBytes = ((sizeof(CB_SNOW_INFO) + 255) & ~255); //256의 배수
+	for (int i = 0; i < SNOW_NUM; i++)
+	{
+		m_pSnowBillboardMesh->m_pVertices[i].m_xmf3Position.x += 1.f; 
+		CB_SNOW_INFO* pbMappedcbSnow = (CB_SNOW_INFO*)((UINT8*)m_pcbMappedSnow + (i * ncbElementBytes));
+		pbMappedcbSnow->m_xmf3Position = m_pSnowBillboardMesh->m_pVertices[i].m_xmf3Position;
+		pbMappedcbSnow->m_xmf2Size = m_pSnowBillboardMesh->m_pVertices[i].m_xmf2Size;
+	}
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbSnowBillboard->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(6, d3dGpuVirtualAddress);
+
 }
 
 void CSnowBillboardObjectsShader::ReleaseObjects()
 {
+	if (m_pd3dcbSnowBillboard)
+	{
+		m_pd3dcbSnowBillboard->Unmap(0, NULL);
+		m_pd3dcbSnowBillboard->Release();
+	}
 	CTexturedShader::ReleaseObjects();
 
 	if (m_pBillboardMaterial)m_pBillboardMaterial->Release();
