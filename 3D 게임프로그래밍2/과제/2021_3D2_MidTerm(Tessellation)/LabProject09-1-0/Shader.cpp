@@ -738,8 +738,8 @@ D3D12_BLEND_DESC CSnowBillboardObjectsShader::CreateBlendState()
 
 void CSnowBillboardObjectsShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
-	m_nPipelineStates = 1;
-	m_ppd3dPipelineStates = new ID3D12PipelineState * [m_nPipelineStates];
+	/*m_nPipelineStates = 1;
+	m_ppd3dPipelineStates = new ID3D12PipelineState * [m_nPipelineStates];*/
 
 	CShader::CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 
@@ -786,7 +786,7 @@ void CSnowBillboardObjectsShader::Render(ID3D12GraphicsCommandList* pd3dCommandL
 
 	m_pBillboardMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
-	pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pd3dCommandList->DrawInstanced(SNOW_NUM, 0, 0, 0);
 }
 
@@ -798,10 +798,10 @@ D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreateVertexShader(ID3DBlob**
 
 D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreateGeometryShader(ID3DBlob** ppd3dShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "GS_SnowBillboard", "vs_5_1", ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "GS_SnowBillboard", "gs_5_1", ppd3dShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE CSnowBillboardObjectsShader::CreatePixelShader(ID3DBlob** ppd3dShaderBlob)
 {
-	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PS_SnowBillboard", "vs_5_1", ppd3dShaderBlob));
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PS_SnowBillboard", "ps_5_1", ppd3dShaderBlob));
 }

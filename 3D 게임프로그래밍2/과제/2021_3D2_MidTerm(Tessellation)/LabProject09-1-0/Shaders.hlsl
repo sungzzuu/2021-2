@@ -417,7 +417,7 @@ void GS_SnowBillboard(point VertexOut gin[1],
 	//
 
     float3 up = float3(0.0f, 1.0f, 0.0f);
-    float3 look = gvCameraPosition - gin[0].CenterW;
+    float3 look = gvCameraPosition.xyz - gin[0].CenterW;
     look.y = 0.0f; // y-axis aligned, so project to xz-plane
     look = normalize(look);
     float3 right = cross(up, look);
@@ -448,8 +448,8 @@ void GS_SnowBillboard(point VertexOut gin[1],
     };
 	
     GeoOut gout;
-	//[unroll]
-    for (int i = 0; i < 4; ++i)
+	[unroll]
+    for (int i = 0; i < 4; i++)
     {
         gout.PosH = mul(v[i], gmtxViewProjection);
         gout.PosW = v[i].xyz;
