@@ -193,6 +193,31 @@ public:
 	virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);
 };
 
+///////////////////////////////////////////////////////////////// 평면 거울
+class CMirrorShader : public CShader
+{
+public:
+	CMirrorShader();
+	virtual ~CMirrorShader();
+
+	virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);
+	
+	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
+	virtual D3D12_BLEND_DESC CreateBlendState();
+
+
+	//virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera);
+
+
+public:
+	CScene* m_pScene;
+	CGameObject* m_pMirrorObject;
+
+};
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CSnowBillboardObjectsShader : public CTexturedShader
@@ -227,3 +252,4 @@ public:
 
 	//virtual void OnPrepareRender(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, void* pContext);
 };
+

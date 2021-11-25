@@ -438,7 +438,7 @@ void GS_SnowBillboard(point VertexOut gin[1],
 	//
     float halfWidth = 0.5f * (gin[0].SizeW.x);
     float halfHeight = 0.5f * (gin[0].SizeW.y);
-    //halfWidth += 10.f;
+    //halfWidth += 10.f.;
     //halfHeight += 10.f;
     //float halfWidth = 10.f;
     //float halfHeight = 10.f;
