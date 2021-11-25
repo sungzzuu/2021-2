@@ -179,7 +179,6 @@ public:
 
 	virtual void OnPrepareRender(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, void* pContext);
 };
-// 쉐이더에서 뭘해조? 아 ㅇㅋㅇㅋ 근데 보니까 다 같은 값이 들어가더라고 그래서 그대로 넣으면 같은위치...이거 내가 잘못한듯
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CSkyBoxShader : public CTexturedShader

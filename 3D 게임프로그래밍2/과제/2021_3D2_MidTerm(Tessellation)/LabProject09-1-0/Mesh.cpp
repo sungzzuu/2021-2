@@ -878,10 +878,10 @@ CSnowBillboardMesh::CSnowBillboardMesh(ID3D12Device* pd3dDevice, ID3D12GraphicsC
 	for (int i = 0; i < SNOW_NUM; i++)
 	{
 		
-		float fx = xmf3Position.x = rand()%100 + 50;
-		float fz = xmf3Position.z = rand() % 100 + 50;
-		float fy = xmf3Position.y = rand() % 100 +300;
-		m_pVertices[i] = CSnowVertex(xmf3Position, XMFLOAT2(10.f, 10.f));
+		float fx = xmf3Position.x = rand()%1000;
+		float fz = xmf3Position.z = rand() % 1000;
+		float fy = xmf3Position.y = rand() % 1000 +200;
+		m_pVertices[i] = CSnowVertex(xmf3Position, XMFLOAT2(3.f, 3.f));
 	}
 	m_pd3dVertexBuffer = CreateBufferResource(pd3dDevice, pd3dCommandList, m_pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER,
 		&m_pd3dVertexUploadBuffer);

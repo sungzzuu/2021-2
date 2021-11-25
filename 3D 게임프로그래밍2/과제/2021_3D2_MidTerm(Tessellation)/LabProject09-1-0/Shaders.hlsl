@@ -373,9 +373,9 @@ float4 PSTerrainTessellation(DS_TERRAIN_TESSELLATION_OUTPUT input) : SV_TARGET
 		float4 cDetailTexColor = gtxtTerrainDetailTexture.Sample(gWrapSamplerState, input.uv1);
 		float fAlpha = gtxtTerrainAlphaTexture.Sample(gWrapSamplerState, input.uv0);
 
-		cColor = saturate(lerp(cBaseTexColor, cDetailTexColor, fAlpha));
-	}
-
+        cColor = saturate(lerp(cDetailTexColor, cBaseTexColor, fAlpha));
+    }
+    
 	return(cColor);
 }
 
@@ -423,7 +423,7 @@ void GS_SnowBillboard(point VertexOut gin[1],
 	// Compute the local coordinate system of the sprite relative to the world
 	// space such that the billboard is aligned with the y-axis and faces the eye.
 	//
-    gin[0].CenterW.x += gfSnowPos.x; 
+    gin[0].CenterW.y -= gfCurrentTime*3.f; 
     //gin[0].SizeW = gfSnowSize;
 
 	

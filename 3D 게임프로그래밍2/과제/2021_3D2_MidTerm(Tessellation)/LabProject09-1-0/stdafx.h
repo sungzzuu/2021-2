@@ -65,7 +65,7 @@ using Microsoft::WRL::ComPtr;
 #define DIRECTIONAL_LIGHT		3
 
 
-#define SNOW_NUM				50
+#define SNOW_NUM				10000
 #define _WITH_TERRAIN_TESSELATION
 
 #ifdef _WITH_TERRAIN_TESSELATION

@@ -825,7 +825,7 @@ void CSnowBillboardObjectsShader::UpdateShaderVariables(ID3D12GraphicsCommandLis
 	UINT ncbElementBytes = ((sizeof(CB_SNOW_INFO) + 255) & ~255); //256ÀÇ ¹è¼ö
 	for (int i = 0; i < SNOW_NUM; i++)
 	{
-		m_pSnowBillboardMesh->m_pVertices[i].m_xmf3Position.x += 1.f; 
+		//m_pSnowBillboardMesh->m_pVertices[i].m_xmf3Position.x += 1.f; 
 		CB_SNOW_INFO* pbMappedcbSnow = (CB_SNOW_INFO*)((UINT8*)m_pcbMappedSnow + (i * ncbElementBytes));
 		pbMappedcbSnow->m_xmf3Position = m_pSnowBillboardMesh->m_pVertices[i].m_xmf3Position;
 		pbMappedcbSnow->m_xmf2Size = m_pSnowBillboardMesh->m_pVertices[i].m_xmf2Size;
