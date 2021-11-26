@@ -202,16 +202,28 @@ public:
 
 	virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);
 	
-	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
-	virtual D3D12_BLEND_DESC CreateBlendState();
+	void CreateShader_MirrorInStencil(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);	// 0
+	void CreateShder_ReflectObjects(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);		// 1	
+	void CreateShader_Mirror(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);				// 2
+	void CreateShader_MirrorBack(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);			// 3
 
+	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState_MirrorInStencil();
+	virtual D3D12_BLEND_DESC CreateBlendState_MirrorInStencil();
 
-	//virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera);
+	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState_ReflectObjects();
+	virtual D3D12_RASTERIZER_DESC CreateRasterizerState_ReflectObjects();
+
+	virtual D3D12_BLEND_DESC CreateBlendState_Mirror();
+
+	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState_MirrorBack();
+
+	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera);
 
 
 public:
 	CScene* m_pScene;
 	CGameObject* m_pMirrorObject;
+	CGameObject* m_pMirrorBackObject;
 
 };
 
