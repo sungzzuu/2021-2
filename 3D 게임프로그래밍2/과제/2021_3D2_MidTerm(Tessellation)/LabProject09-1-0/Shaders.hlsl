@@ -16,7 +16,7 @@ cbuffer cbCameraInfo : register(b1)
 cbuffer cbGameObjectInfo : register(b2)
 {
 	matrix		gmtxWorld : packoffset(c0);
-	uint		gnMaterialID : packoffset(c8);
+	uint		gnMaterialID : packoffset(c4);
 };
 
 #include "Light.hlsl"

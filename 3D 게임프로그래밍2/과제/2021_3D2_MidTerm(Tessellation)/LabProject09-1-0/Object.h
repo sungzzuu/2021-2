@@ -23,14 +23,6 @@
 class CShader;
 class CScene;
 
-struct CB_GAMEOBJECT_INFO
-{
-	XMFLOAT4X4						m_xmf4x4World;
-	UINT							m_nMaterial;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 struct MATERIAL
 {
 	XMFLOAT4						m_xmf4Ambient;
@@ -38,6 +30,20 @@ struct MATERIAL
 	XMFLOAT4						m_xmf4Specular; //(r,g,b,a=power)
 	XMFLOAT4						m_xmf4Emissive;
 };
+
+struct CB_GAMEOBJECT_INFO
+{
+	XMFLOAT4X4						m_xmf4x4World;
+	MATERIAL						m_material;
+
+	XMFLOAT4X4						m_xmf4x4Texture;
+	XMINT2							m_xmi2TextureTiling;
+	XMFLOAT2						m_xmf2TextureOffset;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+
 
 class CTexture
 {
@@ -65,6 +71,9 @@ private:
 
 	int								m_nSamplers = 0;
 	D3D12_GPU_DESCRIPTOR_HANDLE*	m_pd3dSamplerGpuDescriptorHandles = NULL;
+
+public:
+	XMFLOAT4X4						m_xmf4x4Texture;
 
 public:
 	void AddRef() { m_nReferences++; }
