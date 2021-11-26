@@ -89,12 +89,18 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	m_pSkyBox = new CSkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
-	m_nShaders = 1;
+	m_nShaders = 2;
 	m_ppShaders = new CShader * [m_nShaders];
+
+	CObjectsShader* pObjectShader = new CObjectsShader();
+	pObjectShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+	pObjectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
+	m_ppShaders[0] = pObjectShader;
+
 	CSnowBillboardObjectsShader* pSnowBillboardObjectsShader = new CSnowBillboardObjectsShader();
 	pSnowBillboardObjectsShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
 	pSnowBillboardObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pTerrain);
-	m_ppShaders[0] = pSnowBillboardObjectsShader;
+	m_ppShaders[1] = pSnowBillboardObjectsShader;
 
 
 	BuildLightsAndMaterials();
@@ -247,6 +253,10 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[11].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[5]; //t4: gSnowTextureArray (t5, t6, t7, t8, t9)
 	pd3dRootParameters[11].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+	//pd3dRootParameters[12].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[12].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[12].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; // gameObjects
+	//pd3dRootParameters[12].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 
 

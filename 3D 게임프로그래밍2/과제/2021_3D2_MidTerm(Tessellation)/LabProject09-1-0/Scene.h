@@ -80,8 +80,9 @@ protected:
 	ID3D12RootSignature			*m_pd3dGraphicsRootSignature = NULL;
 
 	CGameObject**				m_ppObjects = NULL;
+public:
 	int							m_nObjects = 0;
-
+protected:
 	LIGHTS*						m_pLights = NULL;
 
 	ID3D12Resource*				m_pd3dcbLights = NULL;

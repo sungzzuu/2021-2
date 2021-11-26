@@ -459,6 +459,46 @@ void CObjectsShader::ReleaseShaderVariables()
 
 void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext)
 {
+	m_nObjects = 1;
+	m_ppObjects = new CGameObject * [m_nObjects];
+
+	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Stone.dds", RESOURCE_TEXTURE2D, 0);
+
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, m_nObjects, 1);
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	CreateConstantBufferViews(pd3dDevice, m_nObjects, m_pd3dcbGameObjects, ncbElementBytes);
+	CreateShaderResourceViews(pd3dDevice, pTexture, 0, 7);
+
+
+#ifdef _WITH_BATCH_MATERIAL
+	m_pMaterial = new CMaterial();
+	m_pMaterial->SetTexture(pTexture);
+#else
+	CMaterial* pCubeMaterial = new CMaterial();
+	pCubeMaterial->SetTexture(pTexture);
+#endif
+
+	CHeightMapTerrain* pTerrain = (CHeightMapTerrain*)pContext;
+
+	CCubeMeshTextured* pBuildingMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 20.0f, 20.0f, 20.0f);
+	CGameObject* pBuilding = NULL;
+
+	pBuilding = new CGameObject(1);
+	float fx = 0.f;
+	float fz = 0.f;
+	pBuilding->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 10.f, fz);
+	pBuilding->SetMesh(0, pBuildingMesh);
+
+#ifndef _WITH_BATCH_MATERIAL
+	pBuilding->SetMaterial(pCubeMaterial);
+#endif
+
+	pBuilding->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize));
+	m_ppObjects[0] = pBuilding;
+
 }
 
 void CObjectsShader::ReleaseObjects()
@@ -1183,13 +1223,24 @@ D3D12_DEPTH_STENCIL_DESC CMirrorShader::CreateDepthStencilState_MirrorBack()
 
 void CMirrorShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
-	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[3]); // °Å¿ï µÞ¸é ·»´õ¸µ
-	m_pMirrorBackObject->Render(pd3dCommandList, pCamera);
+	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[3]); 
+	m_pMirrorBackObject->Render(pd3dCommandList, pCamera);		// °Å¿ï µÞ¸é ·»´õ¸µ
 
-	//pd3dCommandList->ClearDepthStencilView(m_d3dDsv)
-
+	pd3dCommandList->ClearDepthStencilView(m_d3dCbvCPUDescriptorStartHandle,
+		D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0.f, 0.f, NULL);
 
 	pd3dCommandList->OMSetStencilRef(1);
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[0]);
+	m_pMirrorObject->Render(pd3dCommandList, pCamera);			// °Å¿ï ½ºÅÙ½Ç ¹öÆÛ¿¡ ·»´õ¸µ
+
+	pd3dCommandList->OMSetStencilRef(1);
+	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[1]);
+	for (int i = 0; i < m_pScene->m_nObjects; i++)
+	{
+		// °Å¿ï¿¡ ¹Ý»çµÈ °´Ã¼ ·±µ¥¸µ Render
+	}
+
+	pd3dCommandList->OMSetStencilRef(0);
+	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[2]); // °Å¿ïÀ» ·»´õ¸µ(ºí·»µù)
 	m_pMirrorObject->Render(pd3dCommandList, pCamera);
 }
