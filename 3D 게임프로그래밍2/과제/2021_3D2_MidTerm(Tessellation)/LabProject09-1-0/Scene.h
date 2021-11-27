@@ -70,7 +70,7 @@ public:
 
 	CHeightMapTerrain *GetTerrain() { return(m_pTerrain); }
 
-protected:
+public:
 	CShader						**m_ppShaders = NULL;
 	int							m_nShaders = 0;
 
@@ -82,7 +82,7 @@ protected:
 	CGameObject**				m_ppObjects = NULL;
 public:
 	int							m_nObjects = 0;
-protected:
+public:
 	LIGHTS*						m_pLights = NULL;
 
 	ID3D12Resource*				m_pd3dcbLights = NULL;
@@ -92,4 +92,8 @@ protected:
 
 	ID3D12Resource*				m_pd3dcbMaterials = NULL;
 	MATERIAL*					m_pcbMappedMaterials = NULL;
+
+public:
+	ID3D12DescriptorHeap*		m_pd3dDsvDescriptorHeap = NULL;
+
 };

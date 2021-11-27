@@ -31,6 +31,7 @@ struct MATERIAL
 	XMFLOAT4						m_xmf4Emissive;
 };
 
+
 struct CB_GAMEOBJECT_INFO
 {
 	XMFLOAT4X4						m_xmf4x4World;
@@ -188,6 +189,7 @@ public:
 	XMFLOAT3 GetRight();
 
 	void SetPosition(float x, float y, float z);
+	
 	void SetPosition(XMFLOAT3 xmf3Position);
 
 	void MoveStrafe(float fDistance = 1.0f);

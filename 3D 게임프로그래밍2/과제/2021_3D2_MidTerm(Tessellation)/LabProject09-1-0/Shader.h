@@ -133,7 +133,7 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera);
 
-protected:
+public:
 	CGameObject						**m_ppObjects = 0;
 	int								m_nObjects = 0;
 
@@ -196,14 +196,20 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////// 평면 거울
-class CMirrorShader : public CShader
+class CMirrorShader : public CTexturedShader
 {
 public:
 	CMirrorShader();
 	virtual ~CMirrorShader();
 
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader_Mirror(ID3DBlob** ppd3dShaderBlob);
+
 	virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);
-	
+	virtual void BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pContext = NULL);
+
+	virtual void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList);
+
 	void CreateShader_MirrorInStencil(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);	// 0
 	void CreateShder_ReflectObjects(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);		// 1	
 	void CreateShader_Mirror(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature);				// 2
@@ -223,10 +229,17 @@ public:
 
 
 public:
-	CScene* m_pScene;
-	CGameObject* m_pMirrorObject;
-	CGameObject* m_pMirrorBackObject;
+	CScene*				m_pScene;
+	CObjectsShader*		m_pObjectsShader;
 
+	CGameObject*		m_pMirrorObject;
+	CGameObject*		m_pMirrorBackObject;
+	ID3D12Resource*		m_pd3dcbMirrorObjects = NULL;
+	CB_GAMEOBJECT_INFO* m_pcbMappedMirrorObjects = NULL;
+
+#ifdef _WITH_BATCH_MATERIAL
+	CMaterial* m_pMaterial = NULL;
+#endif
 };
 
 

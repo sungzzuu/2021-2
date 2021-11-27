@@ -463,7 +463,7 @@ void CObjectsShader::ReleaseShaderVariables()
 
 void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext)
 {
-	m_nObjects = 1;
+	m_nObjects = 2;
 	m_ppObjects = new CGameObject * [m_nObjects];
 
 	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
@@ -489,20 +489,38 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 
 	CCubeMeshTextured* pBuildingMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 20.0f, 20.0f, 20.0f);
 	CGameObject* pBuilding = NULL;
+	for (int i = 0; i < 1; i++)
+	{
+		pBuilding = new CGameObject(1);
+		float fx = 50.f;
+		float fz = 200.f;
+		pBuilding->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 10.f, fz);
+		//pBuilding->
+		pBuilding->SetMesh(0, pBuildingMesh);
+
+#ifndef _WITH_BATCH_MATERIAL
+		pBuilding->SetMaterial(pCubeMaterial);
+#endif
+
+		pBuilding->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
+		m_ppObjects[i] = pBuilding;
+	}
+	CCubeMeshTextured* pInsideMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 600.0f, 600.0f, 600.0f);
 
 	pBuilding = new CGameObject(1);
-	float fx = 50.f;
-	float fz = 200.f;
-	pBuilding->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 10.f, fz);
+	float fx = 2500.f;
+	float fz = 300.f;
+	pBuilding->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 300.f, fz);
+	
 	//pBuilding->
-	pBuilding->SetMesh(0, pBuildingMesh);
+	pBuilding->SetMesh(0, pInsideMesh);
 
 #ifndef _WITH_BATCH_MATERIAL
 	pBuilding->SetMaterial(pCubeMaterial);
 #endif
 
-	pBuilding->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize*0));
-	m_ppObjects[0] = pBuilding;
+	pBuilding->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * 1));
+	m_ppObjects[1] = pBuilding;
 
 }
 
@@ -928,6 +946,11 @@ CMirrorShader::~CMirrorShader()
 {
 }
 
+D3D12_SHADER_BYTECODE CMirrorShader::CreatePixelShader_Mirror(ID3DBlob** ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSMirror", "ps_5_1", ppd3dShaderBlob));
+}
+
 void CMirrorShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
 	// 거울 렌더링 -> 파이프라인 상태 4개 필요
@@ -939,6 +962,78 @@ void CMirrorShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* 
 	CreateShader_Mirror(pd3dDevice, pd3dGraphicsRootSignature);
 	CreateShader_MirrorBack(pd3dDevice, pd3dGraphicsRootSignature);
 }
+
+void CMirrorShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pContext)
+{
+
+	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/ice.dds", RESOURCE_TEXTURE2D, 0);
+
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, 1, 1);
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	CreateConstantBufferViews(pd3dDevice, 1, m_pd3dcbMirrorObjects, ncbElementBytes);
+	CreateShaderResourceViews(pd3dDevice, pTexture, 0, 12);
+
+
+#ifdef _WITH_BATCH_MATERIAL
+	m_pMaterial = new CMaterial();
+	m_pMaterial->SetTexture(pTexture);
+#else
+	CMaterial* pCubeMaterial = new CMaterial();
+	pCubeMaterial->SetTexture(pTexture);
+#endif
+
+	CHeightMapTerrain* pTerrain = (CHeightMapTerrain*)pContext;
+
+	CTexturedRectMesh* pMirrorMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 100.0f, 100.0f,0,0,0,0);
+
+	m_pMirrorObject = new CGameObject(1);
+	float fx = 50.f;
+	float fz = 50.f;
+	m_pMirrorObject->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 50.f, fz);
+	//pBuilding->
+	m_pMirrorObject->SetMesh(0, pMirrorMesh);
+	XMFLOAT3 xmf3Axis = { 0,1,0 };
+	m_pMirrorObject->Rotate(&xmf3Axis, 180);
+	m_pMirrorObject->SetMaterial(m_pMaterial);
+#ifndef _WITH_BATCH_MATERIAL
+	m_pMirrorObject->SetMaterial(pCubeMaterial);
+#endif
+
+	m_pMirrorObject->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize *0));
+}
+
+void CMirrorShader::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
+	m_pd3dcbMirrorObjects = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes * 1, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbMirrorObjects->Map(0, NULL, (void**)&m_pcbMappedMirrorObjects);
+}
+
+void CMirrorShader::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+	CB_GAMEOBJECT_INFO* pbMappedcbGameObject = (CB_GAMEOBJECT_INFO*)((UINT8*)m_pcbMappedMirrorObjects + (0 * ncbElementBytes));
+	XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_pMirrorObject->m_xmf4x4World)));
+	if (m_pMirrorObject->m_pMaterial)
+	{
+		XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4Texture, XMMatrixTranspose(XMLoadFloat4x4(&(m_pMirrorObject->m_pMaterial->m_pTexture->m_xmf4x4Texture))));
+
+	}
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbMirrorObjects->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dGpuVirtualAddress);
+	//pbMappedcbGameObject = (CB_GAMEOBJECT_INFO*)((UINT8*)m_pcbMappedMirrorObjects + (1 * ncbElementBytes));
+	//XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_pMirrorBackObject->m_xmf4x4World)));
+	//if (m_pMirrorBackObject->m_pMaterial)
+	//{
+	//	XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4Texture, XMMatrixTranspose(XMLoadFloat4x4(&(m_pMirrorBackObject->m_pMaterial->m_pTexture->m_xmf4x4Texture))));
+
+	//}
+}
+
 
 void CMirrorShader::CreateShader_MirrorInStencil(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
@@ -954,7 +1049,7 @@ void CMirrorShader::CreateShader_MirrorInStencil(ID3D12Device* pd3dDevice, ID3D1
 	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
-	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShader_Mirror(&pd3dPixelShaderBlob);
 	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
 	d3dPipelineStateDesc.BlendState = CreateBlendState_MirrorInStencil();
 	d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState_MirrorInStencil();
@@ -993,7 +1088,7 @@ void CMirrorShader::CreateShder_ReflectObjects(ID3D12Device* pd3dDevice, ID3D12R
 	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
 	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
-	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShader_Mirror(&pd3dPixelShaderBlob);
 	d3dPipelineStateDesc.HS = CreateHullShader(&pd3dHullShaderBlob);
 	d3dPipelineStateDesc.DS = CreateDomainShader(&pd3dDomainShaderBlob);
 	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState_ReflectObjects();
@@ -1034,7 +1129,7 @@ void CMirrorShader::CreateShader_Mirror(ID3D12Device* pd3dDevice, ID3D12RootSign
 	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
 	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
-	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShader_Mirror(&pd3dPixelShaderBlob);
 	d3dPipelineStateDesc.HS = CreateHullShader(&pd3dHullShaderBlob);
 	d3dPipelineStateDesc.DS = CreateDomainShader(&pd3dDomainShaderBlob);
 	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
@@ -1075,7 +1170,7 @@ void CMirrorShader::CreateShader_MirrorBack(ID3D12Device* pd3dDevice, ID3D12Root
 	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
 	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
-	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShader_Mirror(&pd3dPixelShaderBlob);
 	d3dPipelineStateDesc.HS = CreateHullShader(&pd3dHullShaderBlob);
 	d3dPipelineStateDesc.DS = CreateDomainShader(&pd3dDomainShaderBlob);
 	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
@@ -1228,24 +1323,55 @@ D3D12_DEPTH_STENCIL_DESC CMirrorShader::CreateDepthStencilState_MirrorBack()
 
 void CMirrorShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
-	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[3]); 
-	m_pMirrorBackObject->Render(pd3dCommandList, pCamera);		// 거울 뒷면 렌더링
+	if (m_pd3dCbvSrvDescriptorHeap) pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
-	pd3dCommandList->ClearDepthStencilView(m_d3dCbvCPUDescriptorStartHandle,
-		D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0.f, 0.f, NULL);
+
+	UpdateShaderVariables(pd3dCommandList);
+	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[3]); 
+	//m_pMirrorBackObject->Render(pd3dCommandList, pCamera);		// 거울 뒷면 렌더링
+
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle = m_pScene->m_pd3dDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	pd3dCommandList->OMSetStencilRef(1);
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[0]);
 	m_pMirrorObject->Render(pd3dCommandList, pCamera);			// 거울 스텐실 버퍼에 렌더링
 
+	XMVECTOR xmvMirrorPlane = XMVectorSet(0.f, 0.f, 1.f, 0.f); // xy 평면
+	XMMATRIX xmmtxReflect = XMMatrixReflect(xmvMirrorPlane);
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		XMVECTOR xmvLightPos = XMLoadFloat3(&m_pScene->m_pLights->m_pLights[i].m_xmf3Position);
+		XMVECTOR xmvReflectedLightPos = XMVector3TransformCoord(xmvLightPos, xmmtxReflect);
+		XMStoreFloat3(&m_pScene->m_pcbMappedLights->m_pLights[i].m_xmf3Position, xmvReflectedLightPos);
+		XMVECTOR xmvLightDir = XMLoadFloat3(&m_pScene->m_pLights->m_pLights[i].m_xmf3Direction);
+		XMVECTOR xmvReflectedLightDir = XMVector3TransformNormal(xmvLightDir, xmmtxReflect);
+		XMStoreFloat3(&m_pScene->m_pcbMappedLights->m_pLights[i].m_xmf3Direction, xmvReflectedLightDir);
+	}
+
 	pd3dCommandList->OMSetStencilRef(1);
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[1]);
-	for (int i = 0; i < m_pScene->m_nObjects; i++)
+
+	// Terrain이랑 상자
+	int iObjNum = m_pObjectsShader->m_nObjects;
+	CGameObject** ppObjects = m_pObjectsShader->m_ppObjects;
+
+	for (int i = 0; i < iObjNum; i++)
 	{
-		// 거울에 반사된 객체 런데링 Render
+		// 거울에 반사된 객체 런더링 Render
+		XMFLOAT4X4 xmf4x4World = ppObjects[i]->m_xmf4x4World;
+		XMMATRIX xmmtxWorld = XMLoadFloat4x4(&ppObjects[i]->m_xmf4x4World);
+		XMMATRIX xmmtxReflected = XMMatrixMultiply(xmmtxWorld, xmmtxReflect);
+		XMStoreFloat4x4(&ppObjects[i]->m_xmf4x4World, xmmtxReflected);
+		ppObjects[i]->Render(pd3dCommandList, pCamera);
+		ppObjects[i]->m_xmf4x4World = xmf4x4World;
+
 	}
 
 	pd3dCommandList->OMSetStencilRef(0);
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[2]); // 거울을 렌더링(블렌딩)
+
+	m_pMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
+
 	m_pMirrorObject->Render(pd3dCommandList, pCamera);
 }

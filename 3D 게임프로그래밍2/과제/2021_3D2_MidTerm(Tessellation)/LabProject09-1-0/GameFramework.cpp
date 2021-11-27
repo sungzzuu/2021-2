@@ -602,6 +602,7 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 
 	m_pScene->OnPrepareRender(m_pd3dCommandList);
+	m_pScene->m_pd3dDsvDescriptorHeap = m_pd3dDsvDescriptorHeap;
 	UpdateShaderVariables();
 	m_pScene->Render(m_pd3dCommandList, m_pCamera);
 
