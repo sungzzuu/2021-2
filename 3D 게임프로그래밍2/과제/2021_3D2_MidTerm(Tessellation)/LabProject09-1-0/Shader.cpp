@@ -991,8 +991,8 @@ void CMirrorShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommand
 
 	m_pMirrorObject = new CGameObject(1);
 	float fx = 50.f;
-	float fz = 50.f;
-	m_pMirrorObject->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 50.f, fz);
+	float fz = 230.f;
+	m_pMirrorObject->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 0.f, fz);
 	//pBuilding->
 	m_pMirrorObject->SetMesh(0, pMirrorMesh);
 	XMFLOAT3 xmf3Axis = { 0,1,0 };
@@ -1331,7 +1331,7 @@ void CMirrorShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* 
 	//m_pMirrorBackObject->Render(pd3dCommandList, pCamera);		// °Å¿ï µÞ¸é ·»´õ¸µ
 
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle = m_pScene->m_pd3dDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	pd3dCommandList->OMSetStencilRef(1);
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[0]);
