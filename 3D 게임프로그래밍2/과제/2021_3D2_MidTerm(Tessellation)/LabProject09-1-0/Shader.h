@@ -196,7 +196,7 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////// 평면 거울
-class CMirrorShader : public CTexturedShader
+class CMirrorShader : public CObjectsShader
 {
 public:
 	CMirrorShader();

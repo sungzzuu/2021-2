@@ -467,7 +467,7 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 	m_ppObjects = new CGameObject * [m_nObjects];
 
 	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/stones.dds", RESOURCE_TEXTURE2D, 0);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/WoodCrate02.dds", RESOURCE_TEXTURE2D, 0);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -967,7 +967,7 @@ void CMirrorShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommand
 {
 
 	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/ice.dds", RESOURCE_TEXTURE2D, 0);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/WoodCrate02.dds", RESOURCE_TEXTURE2D, 0);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -987,17 +987,17 @@ void CMirrorShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommand
 
 	CHeightMapTerrain* pTerrain = (CHeightMapTerrain*)pContext;
 
-	CTexturedRectMesh* pMirrorMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 100.0f, 100.0f,0,0,0,0);
+	CTexturedRectMesh* pMirrorMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 100.0f, 100.0f,0.f,0.f,0.f,0.f);
 
 	m_pMirrorObject = new CGameObject(1);
 	float fx = 50.f;
 	float fz = 230.f;
-	m_pMirrorObject->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 0.f, fz);
+	m_pMirrorObject->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 2.f, fz);
 	//pBuilding->
 	m_pMirrorObject->SetMesh(0, pMirrorMesh);
 	XMFLOAT3 xmf3Axis = { 0,1,0 };
 	m_pMirrorObject->Rotate(&xmf3Axis, 180);
-	m_pMirrorObject->SetMaterial(m_pMaterial);
+	//m_pMirrorObject->SetMaterial(m_pMaterial);
 #ifndef _WITH_BATCH_MATERIAL
 	m_pMirrorObject->SetMaterial(pCubeMaterial);
 #endif
@@ -1023,8 +1023,8 @@ void CMirrorShader::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommand
 		XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4Texture, XMMatrixTranspose(XMLoadFloat4x4(&(m_pMirrorObject->m_pMaterial->m_pTexture->m_xmf4x4Texture))));
 
 	}
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbMirrorObjects->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dGpuVirtualAddress);
+	//D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbMirrorObjects->GetGPUVirtualAddress();
+	//pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dGpuVirtualAddress);
 	//pbMappedcbGameObject = (CB_GAMEOBJECT_INFO*)((UINT8*)m_pcbMappedMirrorObjects + (1 * ncbElementBytes));
 	//XMStoreFloat4x4(&pbMappedcbGameObject->m_xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_pMirrorBackObject->m_xmf4x4World)));
 	//if (m_pMirrorBackObject->m_pMaterial)
@@ -1337,17 +1337,17 @@ void CMirrorShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* 
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[0]);
 	m_pMirrorObject->Render(pd3dCommandList, pCamera);			// 거울 스텐실 버퍼에 렌더링
 
-	XMVECTOR xmvMirrorPlane = XMVectorSet(0.f, 0.f, 1.f, 0.f); // xy 평면
+	XMVECTOR xmvMirrorPlane = XMVectorSet(0.f, 0.f, -1.f, 0.f); // xy 평면
 	XMMATRIX xmmtxReflect = XMMatrixReflect(xmvMirrorPlane);
-	for (int i = 0; i < MAX_LIGHTS; i++)
-	{
-		XMVECTOR xmvLightPos = XMLoadFloat3(&m_pScene->m_pLights->m_pLights[i].m_xmf3Position);
-		XMVECTOR xmvReflectedLightPos = XMVector3TransformCoord(xmvLightPos, xmmtxReflect);
-		XMStoreFloat3(&m_pScene->m_pcbMappedLights->m_pLights[i].m_xmf3Position, xmvReflectedLightPos);
-		XMVECTOR xmvLightDir = XMLoadFloat3(&m_pScene->m_pLights->m_pLights[i].m_xmf3Direction);
-		XMVECTOR xmvReflectedLightDir = XMVector3TransformNormal(xmvLightDir, xmmtxReflect);
-		XMStoreFloat3(&m_pScene->m_pcbMappedLights->m_pLights[i].m_xmf3Direction, xmvReflectedLightDir);
-	}
+	//for (int i = 0; i < MAX_LIGHTS; i++)
+	//{
+	//	XMVECTOR xmvLightPos = XMLoadFloat3(&m_pScene->m_pLights->m_pLights[i].m_xmf3Position);
+	//	XMVECTOR xmvReflectedLightPos = XMVector3TransformCoord(xmvLightPos, xmmtxReflect);
+	//	XMStoreFloat3(&m_pScene->m_pcbMappedLights->m_pLights[i].m_xmf3Position, xmvReflectedLightPos);
+	//	XMVECTOR xmvLightDir = XMLoadFloat3(&m_pScene->m_pLights->m_pLights[i].m_xmf3Direction);
+	//	XMVECTOR xmvReflectedLightDir = XMVector3TransformNormal(xmvLightDir, xmmtxReflect);
+	//	XMStoreFloat3(&m_pScene->m_pcbMappedLights->m_pLights[i].m_xmf3Direction, xmvReflectedLightDir);
+	//}
 
 	pd3dCommandList->OMSetStencilRef(1);
 	pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[1]);
