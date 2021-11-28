@@ -355,6 +355,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case 'W':
 					::gbTerrainTessellationWireframe = !::gbTerrainTessellationWireframe;
 					break;
+				case 'I':
+					m_pPlayer->SetPosition(XMFLOAT3(-50.f, 0.f, -50.f));
+					break;
 				case VK_F9:
 					ChangeSwapChainState();
 					break;

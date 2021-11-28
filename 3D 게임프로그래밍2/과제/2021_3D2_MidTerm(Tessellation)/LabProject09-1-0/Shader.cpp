@@ -427,6 +427,55 @@ CObjectsShader::~CObjectsShader()
 {
 }
 
+void CObjectsShader::CreateShader(ID3D12Device* pd3dDevice, ID3D12RootSignature* pd3dGraphicsRootSignature)
+{
+	if (pd3dGraphicsRootSignature)
+	{
+		m_pd3dGraphicsRootSignature = pd3dGraphicsRootSignature;
+		pd3dGraphicsRootSignature->AddRef();
+	}
+
+	m_nPipelineStates = 2;
+	m_ppd3dPipelineStates = new ID3D12PipelineState * [m_nPipelineStates];
+
+	
+
+	ID3DBlob* pd3dVertexShaderBlob = NULL, * pd3dGeometryShaderBlob = NULL, * pd3dPixelShaderBlob = NULL, * pd3dHullShaderBlob = NULL, * pd3dDomainShaderBlob = NULL;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
+	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
+	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
+	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.HS = CreateHullShader(&pd3dHullShaderBlob);
+	d3dPipelineStateDesc.DS = CreateDomainShader(&pd3dDomainShaderBlob);
+	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
+	d3dPipelineStateDesc.BlendState = CreateBlendState();
+	d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	d3dPipelineStateDesc.InputLayout = CreateInputLayout();
+	d3dPipelineStateDesc.SampleMask = UINT_MAX;
+	d3dPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE; //D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH
+	d3dPipelineStateDesc.NumRenderTargets = 1;
+	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	d3dPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	d3dPipelineStateDesc.SampleDesc.Count = 1;
+	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&m_ppd3dPipelineStates[0]);
+
+	d3dPipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
+	hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&m_ppd3dPipelineStates[1]);
+
+	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
+	if (pd3dGeometryShaderBlob) pd3dGeometryShaderBlob->Release();
+
+	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();
+	if (pd3dHullShaderBlob) pd3dHullShaderBlob->Release();
+	if (pd3dDomainShaderBlob) pd3dDomainShaderBlob->Release();
+
+	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[] d3dPipelineStateDesc.InputLayout.pInputElementDescs;
+}
+
 void CObjectsShader::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
@@ -492,9 +541,9 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 	for (int i = 0; i < 1; i++)
 	{
 		pBuilding = new CGameObject(1);
-		float fx = 50.f;
-		float fz = 200.f;
-		pBuilding->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 10.f, fz);
+		float fx = 0.f;
+		float fz = -30.f;
+		pBuilding->SetPosition(fx, 10.f, fz);
 		//pBuilding->
 		pBuilding->SetMesh(0, pBuildingMesh);
 
@@ -505,12 +554,12 @@ void CObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsComman
 		pBuilding->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
 		m_ppObjects[i] = pBuilding;
 	}
-	CCubeMeshTextured* pInsideMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 600.0f, 600.0f, 600.0f);
+	CCubeMeshTextured* pInsideMesh = new CCubeMeshTextured(pd3dDevice, pd3dCommandList, 500.0f, 500.0f, 500.0f);
 
 	pBuilding = new CGameObject(1);
-	float fx = 2500.f;
-	float fz = 300.f;
-	pBuilding->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 300.f, fz);
+	float fx = 0.f;
+	float fz = 0.f;
+	pBuilding->SetPosition(fx, 250.f, fz);
 	
 	//pBuilding->
 	pBuilding->SetMesh(0, pInsideMesh);
@@ -567,6 +616,14 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera 
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
+		if (j == 1)
+		{
+			pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[1]); // 실내
+
+		}
+		else
+			pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[0]); // 그외
+
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 	}
 }
@@ -967,7 +1024,7 @@ void CMirrorShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommand
 {
 
 	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0, 1);
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/WoodCrate02.dds", RESOURCE_TEXTURE2D, 0);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Ice.dds", RESOURCE_TEXTURE2D, 0);
 
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
@@ -990,9 +1047,9 @@ void CMirrorShader::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommand
 	CTexturedRectMesh* pMirrorMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 100.0f, 100.0f,0.f,0.f,0.f,0.f);
 
 	m_pMirrorObject = new CGameObject(1);
-	float fx = 50.f;
-	float fz = 230.f;
-	m_pMirrorObject->SetPosition(fx, pTerrain->GetHeight(fx, fz) + 2.f, fz);
+	float fx = 0.f;
+	float fz = 0.f;
+	m_pMirrorObject->SetPosition(fx, 11.f, fz);
 	//pBuilding->
 	m_pMirrorObject->SetMesh(0, pMirrorMesh);
 	XMFLOAT3 xmf3Axis = { 0,1,0 };
