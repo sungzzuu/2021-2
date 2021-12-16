@@ -355,6 +355,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case 'W':
 					::gbTerrainTessellationWireframe = !::gbTerrainTessellationWireframe;
 					break;
+				case 'I':
+					m_pPlayer->SetPosition(XMFLOAT3(-50.f, 0.f, -50.f));
+					break;
 				case VK_F9:
 					ChangeSwapChainState();
 					break;
@@ -602,6 +605,7 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 
 	m_pScene->OnPrepareRender(m_pd3dCommandList);
+	m_pScene->m_pd3dDsvDescriptorHeap = m_pd3dDsvDescriptorHeap;
 	UpdateShaderVariables();
 	m_pScene->Render(m_pd3dCommandList, m_pCamera);
 

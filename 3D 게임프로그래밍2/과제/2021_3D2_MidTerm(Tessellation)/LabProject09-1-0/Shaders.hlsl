@@ -16,7 +16,7 @@ cbuffer cbCameraInfo : register(b1)
 cbuffer cbGameObjectInfo : register(b2)
 {
 	matrix		gmtxWorld : packoffset(c0);
-	uint		gnMaterialID : packoffset(c8);
+	uint		gnMaterialID : packoffset(c4);
 };
 
 #include "Light.hlsl"
@@ -143,6 +143,14 @@ Texture2D<float> gtxtTerrainAlphaTexture : register(t3);
 ////////// billboard
 Texture2DArray gSnowTextureArray : register(t4);
 ////////////
+Texture2D<float> gtxtMirror : register(t9);
+
+float4 PSMirror(VS_TEXTURED_OUTPUT input, uint primitiveID : SV_PrimitiveID) : SV_TARGET
+{
+    float4 cColor = gtxtMirror.Sample(gWrapSamplerState, input.uv);
+
+    return (cColor);
+}
 
 struct VS_TERRAIN_INPUT
 {
