@@ -28,7 +28,7 @@ cbuffer cbFrameworkInfo : register(b5)
 	uint		gnRenderMode : packoffset(c0.z);
 };
 
-cbuffer cbFrameworkInfo : register(b6)
+cbuffer cbSnowInfo : register(b6)
 {
     float3 gfSnowPos : packoffset(c0);
     float2 gfSnowSize : packoffset(c1);
@@ -147,6 +147,7 @@ Texture2D<float> gtxtMirror : register(t9);
 
 float4 PSMirror(VS_TEXTURED_OUTPUT input, uint primitiveID : SV_PrimitiveID) : SV_TARGET
 {
+
     float4 cColor = gtxtMirror.Sample(gWrapSamplerState, input.uv);
 
     return (cColor);
